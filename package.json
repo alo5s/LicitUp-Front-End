@@ -1,0 +1,36 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-brands-svg-icons": "^6.4.2",
+    "@fortawesome/free-regular-svg-icons": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/vue-fontawesome": "^3.0.3",
+    "@vuepic/vue-datepicker": "^7.0.0",
+    "apexcharts": "^3.44.0",
+    "axios": "^1.5.1",
+    "floating-vue": "^2.0.0-beta.24",
+    "js-cookie": "^3.0.5",
+    "vue": "^3.3.4",
+    "vue-apexcharts": "^1.6.2",
+    "vue-axios": "^3.5.2",
+    "vue-router": "^4.2.5",
+    "vue-sweetalert2": "^5.0.5",
+    "vue3-apexcharts": "^1.4.4",
+    "vue3-leaflet": "^1.0.46"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "leaflet": "^1.9.4",
+    "vite": "^4.4.5"
+  }
+}
