@@ -23,14 +23,14 @@
   </div>
 
   <div>
-    <i class="fa fa-phone"></i>
-    <p>+1.555.555.5555</p>
-  </div>
-
-  <div>
     <i class="fa fa-envelope"></i>
     <p><a href="mailto:support@company.com">support@company.com</a></p>
   </div>
+
+  <div>
+    <i class="fa fa-phone"></i>
+  </div>
+
 
 </div>
 

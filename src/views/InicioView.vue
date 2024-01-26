@@ -6,7 +6,7 @@
                 Maximiza tu tiempo: con LicitUp descubre
                 <span class="text-color">{{ data.cantidad }}</span>
                 Licitaciones publicadas a la fecha
-                <span class="text-color">{{ data.fecha }}</span>
+                <span class="text-color">{{fechaChile}}</span>
                 y usa Nuestras Herramientas
             </h1>
         </div>
@@ -14,30 +14,41 @@
 </template>
 <script>
 import licitUp_bk from '../authentication/licitup_request.js'
+import moment from 'moment-timezone';
 
 export default {
     data() {
         return {
             data: {
                 cantidad: 0,
-                fecha: ''
-            }
+
+            },
+            fechaChile: ''
         }
     },
     mounted() {
         this.fetchData()
+        this.mostrarFechaChile();
     },
+
     methods: {
         async fetchData() {
             try {
                 const response = await licitUp_bk.count()
                 this.data.cantidad = response.data.total;
-                this.data.fecha = response.data.Fecha;
             } catch (error) {
                 console.error("Error al obtener datos en fetchData:", error);
             }
-        }
-    }
+        },
+        mostrarFechaChile() {
+            // Configurar moment para usar la zona horaria de Chile
+            moment.tz.setDefault('America/Santiago')  ;
+
+          // Obtener la fecha actual en formato deseado (puedes ajustar el formato según tus necesidades) DD-MM-YYYY'
+          this.fechaChile = moment().format('DD-MM-YYYY');
+        },
+     }
+
 }
 </script>
 

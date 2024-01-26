@@ -2,7 +2,10 @@
   <header>
       <div class="content-menu-logo">
           <div class="Logo-Menu">
-              <h1 class="logo">Licit<span class="up">Up</span></h1> 
+            <router-link class="link-logo" to="/">
+              <h1 class="logo" >Licit<span class="up">Up</span></h1>
+            </router-link>
+               
           </div>
           <div class="btn-menu" >
             <button @click="toggleNav" >
@@ -17,7 +20,7 @@
                   <li><router-link class="link" to="/">Inicio</router-link></li>
                   <li><router-link class="link" to="/Licitaciones">Licitaciones</router-link></li>
                   <li><router-link class="link" to="/Seguimientos">Seguimientos</router-link></li>
-                  <li><router-link class="link" to="/Analisis">Analisis</router-link></li>
+                  <li><router-link class="link" to="/Analisis">Análisis</router-link></li>
                   <li><router-link class="link" to="/Mapa">Mapa</router-link></li>
 
                   <!--------------------
@@ -66,7 +69,9 @@ export default {
 </script>
 
 <style scoped>
-
+.link-logo{
+  padding: 0px;
+}
 .usario{
   width: 10vh;
   height: 5vh;
@@ -134,7 +139,7 @@ header .logo {
 
 .content-ul-li-a li ,a {
   text-decoration: none;
-  font-family: monospace;
+  font-family: system-ui;
   padding: 6px 15px;
   color: white;
   max-width: 400px;

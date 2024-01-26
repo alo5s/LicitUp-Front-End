@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { far } from '@fortawesome/free-regular-svg-icons';
 
 // Esto son los Iconos fa-house
-import { faUserSecret, faStar, faSearch, faFileLines, faEarthAmerica, faBars, faXmark} from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faStar, faSearch, faFileLines, faEarthAmerica, faBars, faXmark, faArrowsLeftRight, faArrowLeft,faArrowRight} from '@fortawesome/free-solid-svg-icons'
 
-library.add(faUserSecret, faStar, faSearch, faFileLines, far, faEarthAmerica, faBars, faXmark);
+library.add(faUserSecret, faStar, faSearch, faFileLines, far, faEarthAmerica, faBars, faXmark, faArrowsLeftRight, faArrowLeft, faArrowRight);
 
 
 export { FontAwesomeIcon };

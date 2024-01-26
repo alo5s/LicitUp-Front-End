@@ -2,26 +2,30 @@
   <section class="conteiner-usario height-100vh">
     <div class="center-fomr-usario">
       <div class="conteiner-login">
+        <div class="conteinter-circulo">
+         <span>4/4</span>
+        </div>
         <div class="form-usario">
           <!-- Headings for the form -->
           <div class="headingsContainer">
-            <h1>Perfil</h1>
-            <p>Complete los datos de su Perfil</p>
+            <h1>Mis Preferencias</h1>
+            <p>Complete las preferencia de su perfil</p>
           </div>
           <!-- Main container for all inputs -->
           <div class="mainContainer">
             <!-- Monto Estimado Mínimo -->
-            <label>Su Monto Estimado es Minimo <input type="number" class="laberl" :value="montoMinimo" @input="updateMinimo"></label>
+            <label>Su Monto Estimado es Mínimo {{ formatNumber(montoMinimo) }}</label>
             <input type="range" class="select" :min="min" :max="max" v-model="montoMinimo" @input="updateMinimo">
             <br><br>            
             <!-- Monto Estimado Máximo -->
-            <label>Su Monto Estimado es Maximo <input type="number" class="laberl" :value="montoMaximo" @input="updateMaximo"></label>
+            <label>Su Monto Estimado es Máximo {{ formatNumber(montoMaximo) }}</label>
             <input type="range" class="select" :min="min" :max="max" v-model="montoMaximo" @input="updateMaximo">
             <br><br>
             <label>Total de licitaciones a mostrar: {{ numLi }}</label>
-            <input type="range" class="select" min="1" max="250" v-model="numLi">
+            <input type="range" class="select" min="1" max="100" v-model="numLi">
             <br><br>
-            <button @click="registrarPerfil" class="btn-usario">Registrar 4/4</button>
+            <button @click="regresar" class="btn-usario">Anterior</button>
+            <button @click="registrarPerfil" class="btn-usario">Finalizar</button>
           </div>
         </div>
       </div>          
@@ -33,14 +37,23 @@
 export default {
   data() {
     return {
-      numLi: 1,
+      numLi: 20,
       min: 1000, // Valor mínimo personalizado
-      max: 1000000, // Valor máximo personalizado
+      max: 10000000, // Valor máximo personalizado
       montoMinimo: 1000, // Valor actual del monto mínimo
       montoMaximo: 1000000, // Valor actual del monto máximo
     };
   },
   methods: {
+    formatNumber(value) {
+      return value !== null && value !== undefined
+        ? new Intl.NumberFormat('es-CL', {
+            style: 'currency',
+            currency: 'CLP',
+            minimumFractionDigits: 0
+          }).format(value)
+        : 'No definida';
+    },
     updateMinimo(event) {
       const value = parseInt(event.target.value);
       if (!isNaN(value) && value <= this.montoMaximo) {
@@ -52,6 +65,10 @@ export default {
       } else {
         this.montoMinimo = this.montoMaximo;
       }
+    },
+    regresar() {
+      // Emitir evento para cambiar de página con regresar establecido en true
+      this.$emit('cambiar-pagina', true);
     },
     updateMaximo(event) {
       const value = parseInt(event.target.value);
@@ -104,7 +121,28 @@ header {
 }
 .conteiner-login {
     height: fit-content;
+    position: relative;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.conteinter-circulo {
+    position: absolute;
+    top: -20px;
+    right: -22px;
+    background-color: #2c2c55;
+    border-radius: 50%;
+    padding: 14px;
+    margin-top: 1px;
+    margin-right: 1px;
+    box-shadow: 0px 0px 16px 5px #1414146b;
+    border: 2px solid #fff;
+}
+
+.conteinter-circulo span {
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .form-usario {

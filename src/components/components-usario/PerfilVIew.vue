@@ -21,7 +21,7 @@
           </div>
           <br>
           <div>
-            <label for="montoMin">Total Licitaciones:</label>
+            <label for="montoMin">N ° Licitaciones:</label>
             <input type="text" id="montos" v-model="num_li" placeholder="Ingrese el monto mínimo" :readonly="!editando">
           </div>
         </div>
@@ -47,7 +47,7 @@
           </div>
         </p>
         <datalist id="comunaDbLicitup">
-          <option v-for="comunaDbLicitup in comunasDbLicitup" :value="comunaDbLicitup"></option>
+          <option v-for="comunaDbLicitup in comunasDbLicitup" :value="comunaDbLicitup.ciudad"></option>
         </datalist>
         <p v-if="editando">
           <button class="brn_1" @click="agregarComuna">Agregar</button>
@@ -90,8 +90,6 @@
 
 <script>
 import licitUp_bk from '../authentication/licitup_request.js'
-import comunas from '../lscomunas/ListadeComunas.js';
-
 export default {
   data() {
     return {
@@ -115,7 +113,7 @@ export default {
 
       
       // ls de Comunas de db para el cliente 
-      comunasDbLicitup: comunas,
+      comunasDbLicitup: [],
       //comunasDbLicitup: ['Argentina', 'chile'],
       codificaciónLicitaciones: [
         { valor: 'L1', descripcion: 'Licitación Pública Menor a 100 UTM (L1)' },
@@ -130,7 +128,10 @@ export default {
   },
   mounted() {
     this.cargando = true;
+
     this.datosPerfil();
+
+    this.datosCuestionarios();
   },
   computed: {
     formattedMonMin() {
@@ -141,7 +142,14 @@ export default {
     },
   },
   methods: {
-
+    async datosCuestionarios() {
+      try {
+        const response = await licitUp_bk.datoCuestionario();
+        this.comunasDbLicitup = response.data.comunas;
+      } catch (error) {
+        console.error('Error al realizar la consulta:', error);
+      }
+    },
     formatNumber(value) {
       return value !== null && value !== undefined
         ? new Intl.NumberFormat('es-CL', {
@@ -167,15 +175,14 @@ export default {
         // Agrega el código solo si no está presente
         this.ls_codifi.push(nuevoCodigo);
       } 
-    }, 
-    agregarProducto() {
-      // Add a new, empty product to the array nuevosProductos 
-      const neuvoProducto = "";
-      if (!this.ls_codifi.includes(neuvoProducto)) {
-          // Agrega el código solo si no está presente
-          this.productos.push(neuvoProducto);
-          this.nuevosProductos++;
-      }     
+    },
+    agregarCodigo() {
+      // Verifica si el código ya está en la lista
+      const nuevoCodigo = ""; // Puedes ajustar esto según tus necesidades
+      if (!this.ls_codifi.includes(nuevoCodigo)) {
+        // Agrega el código solo si no está presente
+        this.ls_codifi.push(nuevoCodigo);
+      }
     },
 
     agregarComuna() {
@@ -222,6 +229,11 @@ export default {
         this.ls_codifi.splice(index, 1);
       }
     },
+
+    iniciarEdicion() {
+      this.editando = true;
+    },
+
     cancelarEdicion() {
       this.$swal({
         title: '¿Está seguro de cancelar la edición?',
@@ -234,40 +246,10 @@ export default {
         if (result.isConfirmed) {
           // Restablecer datos originales o realizar otras acciones necesarias
           this.editando = false;
-          this.mostrarDatosOriginales(); // Ajusta esto según tus necesidades
         }
       });
     },
-    
-    iniciarEdicion() {
-      this.editando = true;
-    },
-
     guardarCambios() {
-      // Validar que mon_max sea mayor que mon_min
-      if (this.mon_max !== null && this.mon_min !== null && this.mon_max <= this.mon_min) {
-        this.$swal({
-          title: 'Error',
-          text: `El monto máximo $${this.mon_max} debe ser mayor que el monto mínimo $${this.mon_min}.`,
-          icon: 'error',
-          timer: 3000,
-          timerProgressBar: true,
-        });
-        return; // No permite continuar si hay un error
-      }
-        
-      // Validar que num_li sea un número positivo
-      if (isNaN(this.num_li) || parseInt(this.num_li) <= 0) {
-        this.$swal({
-          title: 'Error',
-          text: 'El número de licitaciones debe ser un número positivo.',
-          icon: 'error',
-          timer: 3000,
-          timerProgressBar: true,
-        });
-        return; // No permite continuar si hay un error
-      }
-
       this.$swal({
         title: '¿Está seguro de realizar estos cambios?',
         text: 'Esta acción guardará los cambios en su perfil.',
@@ -276,28 +258,28 @@ export default {
         confirmButtonText: 'Sí, guardar cambios',
         cancelButtonText: 'No, cancelar',
       }).then((result) => {
-        if (result.isConfirmed) {        
+        if (result.isConfirmed) {
           this.editando = false;
-
+        
           // Filtra elementos vacíos antes de asignar a this.productos
           this.productos = [...new Set(this.productos
             .filter(producto => producto !== null && producto !== undefined)
             .map(producto => (producto && typeof producto.trim === 'function') ? producto.trim() : producto)
           )];
-        
+
           this.ciudades = [...new Set(this.ciudades
             .filter(comuna => comuna !== null && comuna !== undefined)
             .map(comuna => (comuna && typeof comuna.trim === 'function') ? comuna.trim() : comuna)
           )];
-        
+
           this.ls_codifi = [...new Set(this.ls_codifi
             .filter(codi => codi !== null && codi !== undefined)
             .map(codi => (codi && typeof codi.trim === 'function') ? codi.trim() : codi)
           )];
-        
+
           // Establece nuevosProductos a 0
           this.nuevosProductos = 0;
-        
+
           // Tomar los datos 
           const ls_comuna = this.ciudades;
           const ls_ps_ss = this.productos;
@@ -307,13 +289,16 @@ export default {
             monto_minimo: parseFloat(String(this.mon_min).replace(/\./g, '')), // Transforma a decimal eliminando los puntos
             monto_maximo: parseFloat(String(this.mon_max).replace(/\./g, '')) // Transforma a decimal eliminando los puntos
           };
-        
+
           // Hacer la consulta al back-end para enviar los datos al back-end
           licitUp_bk.updateDatoPerfil(ls_comuna, ls_ps_ss, ls_codificacións, ls_parametos);
           this.mostrarAlertaSave();
         }
       });
     },
+    // ... otras funciones
+    
+    
     async handleLogout() {
       // Mostrar cuadro de diálogo de confirmación
       const result = await this.$swal({
@@ -333,7 +318,7 @@ export default {
         window.location.reload();
       }
     },
-
+    
     async datosPerfil(){
       try {
         const response = await licitUp_bk.dataPerfi();
@@ -350,7 +335,6 @@ export default {
           this.cargando = false;
       }
     },
-
     mostrarAlertaSave() {
       // Mostrar mensaje de éxito
       this.$swal({
@@ -363,6 +347,7 @@ export default {
         timerProgressBar: true,
       });
     },
+
   },
 };
 </script>

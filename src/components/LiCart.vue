@@ -186,7 +186,7 @@ export default {
       // Mostrar mensaje de éxito
       this.$swal({
         icon: 'success',
-        title: 'successfully in taking action',
+        title: 'Listo',
         toast: true,
         position: 'top-end',
         showConfirmButton: false,

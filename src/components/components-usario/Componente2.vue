@@ -2,20 +2,23 @@
   <section class="conteiner-usario height-100vh">
     <div class="center-fomr-usario">
       <div class="conteiner-login">
+        <div class="conteinter-circulo">
+          <span>2/4</span>
+        </div>
         <div class="form-usario">
           <!-- Headings for the form -->
           <div class="headingsContainer">
-            <h1>Perfil</h1>
-            <p>Complete los datos de su Perfil</p>
+            <h1>Mis Preferencias</h1>
+            <p>Complete las preferencias de su perfil</p>
           </div>
           <!-- Main container for all inputs -->
           <div class="mainContainer">
-          <!-- Producto o Servicio -->
+            <!-- Producto o Servicio -->
             <label>Productos o Servicios</label>
             <input
               type="text"
               class="select"
-              v-model="ProductoServicioSeleccionada"
+              v-model="productoServicioSeleccionada"
               list="productosServiciosList"
               placeholder="ejmplo Motores o Reparacion .."
             />
@@ -44,8 +47,8 @@
             </ul>
 
             <br /><br />
-            <button @click="registrarPerfil" class="btn-usario">Registrar 2/4</button>
-
+            <button @click="regresar" class="btn-usario">Anterior</button>
+            <button @click="registrarPerfil" class="btn-usario">Siguiente </button>
           </div>
         </div>
       </div>
@@ -59,19 +62,24 @@ export default {
   data() {
     return {
       ProductosServicios: ['Ropa', 'Reparacion'],
-      ProductoServicioSeleccionada: '',
-      productosServiciosSeleccionados: [],
+      productoServicioSeleccionada: '',
       mostrarBorrarIndice: null,
     };
+  },
+  props: {
+    productosServiciosSeleccionados: {
+      type: Array,
+      default: () => [],
+    },
   },
   methods: {
     agregarProductoServicio() {
       if (
-        this.ProductoServicioSeleccionada &&
-        !this.productosServiciosSeleccionados.includes(this.ProductoServicioSeleccionada)
+        this.productoServicioSeleccionada &&
+        !this.productosServiciosSeleccionados.includes(this.productoServicioSeleccionada) // Cambié el nombre del dato local
       ) {
-        this.productosServiciosSeleccionados.push(this.ProductoServicioSeleccionada);
-        this.ProductoServicioSeleccionada = ''; // Limpiar el input después de agregar
+        this.productosServiciosSeleccionados.push(this.productoServicioSeleccionada); // Cambié el nombre del dato local
+        this.productoServicioSeleccionada = ''; // Limpiar el input después de agregar
       }
     },
     mostrarBorrar(index) {
@@ -81,13 +89,26 @@ export default {
       this.mostrarBorrarIndice = null;
     },
     borrarProductoServicio(index) {
-      this.productosServiciosSeleccionados.splice(index, 1);
+      this.productosServiciosSeleccionados.splice(index, 1); // Cambié el nombre del dato local
+    },
+    regresar() {
+      // Emitir evento para cambiar de página con regresar establecido en true
+      this.$emit('cambiar-pagina', true);
     },
     registrarPerfil() {
-      // Emite un evento con las comunas seleccionadas
-      this.$emit('producto-servicio', this.productosServiciosSeleccionados);
-      // Emite el evento para cambiar de página
-      this.$emit('cambiar-pagina');
+      if (this.productosServiciosSeleccionados.length === 0) {
+        // Muestra una alerta si el usuario intenta avanzar sin seleccionar ninguna comuna
+        this.$swal({
+          icon: 'info',
+          title: 'Completa un dato',
+          text: 'Por favor, ingresada al menos una Producto o Servicio antes de continuar.',
+        });
+      } else {
+        // Emite un evento con las comunas seleccionadas
+        this.$emit('producto-servicio', this.productosServiciosSeleccionados);
+        // Emite el evento para cambiar de página
+        this.$emit('cambiar-pagina');
+      }
     },
   },
 };
@@ -119,8 +140,30 @@ header {
 }
 .conteiner-login {
     height: fit-content;
+    position: relative;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+
+.conteinter-circulo {
+    position: absolute;
+    top: -20px;
+    right: -22px;
+    background-color: #2c2c55;
+    border-radius: 50%;
+    padding: 14px;
+    margin-top: 1px;
+    margin-right: 1px;
+    box-shadow: 0px 0px 16px 5px #1414146b;
+    border: 2px solid #fff;
+}
+
+.conteinter-circulo span {
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+}
+
 
 .form-usario {
     width: 25rem;

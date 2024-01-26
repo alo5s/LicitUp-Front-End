@@ -2,31 +2,36 @@
     <section class="conteiner-usario height-100vh">
         <div class="center-fomr-usario">
             <div class="conteiner-login">
+                <div class="conteinter-circulo">
+                  <span>3/4</span>
+                 </div>
                 <div class="form-usario">
                     <!-- Headings for the form -->
                     <div class="headingsContainer">
-                        <h1>Perfil</h1>
-                        <p>Complete los datos de su Perfil</p>
+                        <h1>Mis Preferencias</h1>
+                        <p>Complete las preferencias de su perfil</p>
                     </div>
                     <!-- Main container for all inputs -->
                     <div class="mainContainer">
-                      <label>Seleccione sus codificaciones de licitaciones</label>
+                      <label>Seleccione Tipos de Licitaciones</label>
+                      
                       <select class="select" v-model="codificacionSeleccionada">
-                        <option v-for="codificacion in codificaciónLicitaciones" :key="codificacion">{{ codificacion.descripcion }}</option>
+                        <option v-for="codificacion in codificaciónLicitaciones" :value="codificacion.valor" >{{ codificacion.descripcion }}</option>
                       </select>
                     
                       <button @click="agregarCodificacion" class="btn-agregar">Agregar</button>
                       <br><br>
-                      <label>Codificaciones seleccionadas:</label>
+                      <label>Tipos de Licitaciones seleccionadas:</label>
                       <ul>
-                        <li v-for="(codificacion, index) in codificacionesSeleccionados" :key="index">
+                        <li v-for="valor in codificaciónLicitacionesSeleccionados">
                           <span>
-                            {{ codificacion.descripcion }}
-                            <span @mouseover="mostrarBorrar(index)" @mouseout="ocultarBorrar()" @click="borrar(index)" class="borrar">Borrar</span>
+                            {{ codificaciónLicitaciones.find(c => c.valor === valor).descripcion }}
+                            <span @mouseover="mostrarBorrar(valor)" @mouseout="ocultarBorrar()" @click="borrar(valor)" class="borrar">Borrar</span>
                           </span>
                         </li>
                       </ul>
-                        <button @click="registrarPerfil" class="btn-usario">Registrar 3/4</button>
+                        <button @click="regresar" class="btn-usario">Anterior</button>
+                        <button @click="registrarPerfil" class="btn-usario">Siguiente</button>
                     </div>
                 </div>
             </div>          
@@ -38,7 +43,6 @@
 export default {
   data() {
     return {
-      mostrarBorrarIndice: null,
       codificaciónLicitaciones: [
         { valor: 'L1', descripcion: 'Lic. Publ Menor a 100 UTM (L1)' },
         { valor: 'LE', descripcion: 'Lic. Publ Entre 100 y 1000 UTM (LE)' },
@@ -48,34 +52,53 @@ export default {
         { valor: 'LS', descripcion: 'Lic. Publ Servicios personales especializados (LS)' },
         { valor: 'O1', descripcion: 'Lic Codificacion O1'}
       ],
-      codificacionesSeleccionados: [],
-      codificacionSeleccionada: '',
+      codificacionSeleccionada: null,
     };
+  },
+  props: {
+    codificaciónLicitacionesSeleccionados: {
+      type: Array,
+      default: () => [],
+    },
   },
   methods: {
     agregarCodificacion() {
-      if (this.codificacionSeleccionada) {
-        const seleccion = this.codificaciónLicitaciones.find(option => option.descripcion === this.codificacionSeleccionada);
-        if (seleccion && !this.codificacionesSeleccionados.includes(seleccion)) {
-          this.codificacionesSeleccionados.push(seleccion);
+      try {
+        if (this.codificacionSeleccionada && !this.codificaciónLicitacionesSeleccionados.includes(this.codificacionSeleccionada)) {
+          this.codificaciónLicitacionesSeleccionados.push(this.codificacionSeleccionada);
+          console.log("Esta es ", this.codificaciónLicitacionesSeleccionados); // Imprime la lista actualizada
         }
+      } catch (error) {
+        console.error("Error en agregarCodificacion:", error);
       }
     },
+
     mostrarBorrar(index) {
       this.mostrarBorrarIndice = index;
     },
     ocultarBorrar() {
       this.mostrarBorrarIndice = null;
     },
-    borrar(index) {
-      this.codificacionesSeleccionados.splice(index, 1);
+    borrar(valor) {
+      const index = this.codificaciónLicitacionesSeleccionados.indexOf(valor);
+      if (index !== -1) {
+        this.codificaciónLicitacionesSeleccionados.splice(index, 1);
+      }
     },
     registrarPerfil() {
-      // Emite un evento con las codificaciones seleccionadas (solo los valores)
-      const valoresSeleccionados = this.codificacionesSeleccionados.map(seleccion => seleccion.valor);
-      this.$emit('codificaciones-seleccionadas', valoresSeleccionados);
-      // Emite el evento para cambiar de página
-      this.$emit('cambiar-pagina');
+      if (this.codificaciónLicitacionesSeleccionados.length === 0) {
+        // Muestra una alerta si el usuario intenta avanzar sin seleccionar ninguna comuna
+        this.$swal({
+          icon: 'info',
+          title: 'Completa un dato',
+          text: 'Por favor, Seleccione al menos un tipo de licitaciones antes de continuar.',
+        });
+      } else {
+        // Emite un evento con las comunas seleccionadas
+        this.$emit('codificaciones-seleccionadas', this.codificaciónLicitacionesSeleccionados);
+        // Emite el evento para cambiar de página
+        this.$emit('cambiar-pagina');
+      }
     },
   }
 };
@@ -107,7 +130,28 @@ header {
 }
 .conteiner-login {
     height: fit-content;
+    position: relative;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.conteinter-circulo {
+    position: absolute;
+    top: -20px;
+    right: -22px;
+    background-color: #2c2c55;
+    border-radius: 50%;
+    padding: 14px;
+    margin-top: 1px;
+    margin-right: 1px;
+    box-shadow: 0px 0px 16px 5px #1414146b;
+    border: 2px solid #fff;
+}
+
+.conteinter-circulo span {
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .form-usario {

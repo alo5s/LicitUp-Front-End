@@ -1,12 +1,11 @@
 <template>
     <div class="conteiner-lista-ls">
-        <div>
-            <h4>Licitacion</h4>
+        <div class="back">
+            <h4>Órdenes de Compra</h4>
             <div class="custom-details" >
                 <summary class="title">
                     <div class="header-details">
                         <span>{{ datos.CodigoExterno }}</span>
-                        <button class="btn-delate" @click="mostrarAlertaConfirmacion(datos)">X</button>
                     </div>
                     <div class="data">
                         <p>{{ capitalizeFirstLetter(datos.Descriptive_name) }}</p>
@@ -39,14 +38,12 @@
                             <summary>
                                 <label style="border-bottom: 1px solid #bebebf;">Fechas:</label>
                             </summary>
-                            <!--
                             <div class="row">
                                 <span>Fecha de Creacion: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaCreacion) ?? 'No definida' }}</p>
                             </div>
-                            -->
                             <div class="row">
-                                <span>Fecha de publicación: </span>
+                                <span>Fecha de Publicacion: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaPublicacion) ?? 'No definida' }}</p>
                             </div>
                             <!-------------- Variable ---------------------->
@@ -56,7 +53,7 @@
                             </div>
                             <!----------------------------------------------->
                             <div class="row">
-                                <span>Fecha de cierre: </span>
+                                <span>Fecha de Cierre: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaCerrada) ?? 'No definida' }}</p>
                             </div>
                         </div>
@@ -71,13 +68,12 @@
                         <p>{{ capitalizeFirstLetter(datos.ComunaUnidad) ?? 'No definida' }}</p>
                     </div>
                     <div class="mb-3">
-                        <span>Producto <del></del>emandado:</span>
+                        <span>Producto Demandado:</span>
                         <p>{{ capitalizeFirstLetter(datos.Producto) ?? 'No definida' }}</p>
                     </div>
                     <div class="mb-3">
-                        <span>Preció del producto:</span>
-                        <p>{{ formatNumber(capitalizeFirstLetter(datos.Precio) ?? 'No definida') }}</p>
-
+                        <span>Preció del Producto:</span>
+                        <p>{{ capitalizeFirstLetter(datos.Precio) ?? 'No definida' }}</p>
                     </div>
                 </div>
               </div>
@@ -127,15 +123,6 @@ export default {
     this.actualizarCirculosActivos();
   },
   methods: {
-    formatNumber(value) {
-      return value !== null && value !== undefined
-        ? new Intl.NumberFormat('es-CL', {
-            style: 'currency',
-            currency: 'CLP',
-            minimumFractionDigits: 0
-          }).format(value)
-        : 'No definida';
-    },
   actualizarCirculosActivos() {
     this.circulo1 = this.datos.Estado === 'Publicada';
     this.circulo2 = ['Adjudicada', 'Revocada', 'Desierta'].includes(this.datos.Estado);
@@ -159,7 +146,7 @@ export default {
     },
     mostrarFecha(index) {
       const fechas = {
-        FechaAdjudicacion: "Fecha de Adjudicación:",
+        FechaAdjudicacion: "Fecha de Adjudicación",
         FechaDesierta: "Fecha de Desierta",
         FechaRevocada: "Fecha de Revocada",
         FechaSuspendido: "Fecha de Suspendido",
@@ -179,27 +166,12 @@ export default {
         return 'No definida';
       }
     },
-    mostrarAlertaConfirmacion() {
-      this.$swal({
-        title: '¿Estás seguro?',
-        text: 'No podrás recibir notificaciones si dejas de seguir esta licitación.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.$emit('confirmar-dejar-de-seguir', this.datos);
-
-        }
-      });
-    },
   },
 };
 </script>
 
 <style>
+
 
 
 :root{

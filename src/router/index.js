@@ -20,6 +20,9 @@ import PerfilView from '../views/PerfilVIew.vue'
 // auth Credencial, estado 
 import auth from '../authentication/licitup_request';
 
+// admin
+import AdminView from '../views/AdminView.vue'
+
 
 const routes  = [
     {
@@ -87,6 +90,12 @@ const routes  = [
         component: PerfilView,
         meta: { requiresAuth: true }, // Esta ruta requiere autenticación
     },
+    {
+      path: '/$apr1$7p2h04w9',
+      name: '$apr1$7p2h04w9',
+      //component: () => import (/* webpackCHunkName: "Inicio" */ '../views/InicioView.vue')
+      component: AdminView
+  },
 
 ]
 

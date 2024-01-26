@@ -13,7 +13,7 @@
                     <p>{{ capitalizeFirstLetter(respuesta.Descriptive_name) ?? 'No definida' }}</p>
                 </div>
                 <div class="row">
-                    <span>Nombre del Organismo:</span>
+                    <span>Nombre del Oorganismo:</span>
                     <p>{{ capitalizeFirstLetter(respuesta.Nombre_del_Organismo) ?? 'No definida' }}</p>
                 </div>
                 <div class="row">
@@ -25,7 +25,7 @@
                     <p>{{ capitalizeFirstLetter(respuesta.Producto) ?? 'No definida' }}</p>
                 </div>
                 <div class="row">
-                    <span>Precio Estimado:</span>
+                    <span>Precio estimado:</span>
                     <p>{{ PesosChileno(respuesta.Precio) ?? 'No definida' }}</p>
 
                 </div>
@@ -38,12 +38,14 @@
                     <p>{{ capitalizeFirstLetter(respuesta.Estado) ?? 'No definida' }}</p>
                 </div>
                 <div>
+                    <!--
                     <div class="row">
                         <span>Fecha de Creacion: </span>
                         <p>{{ (respuesta.FechaCreacion) ?? 'No definida' }}</p>
                     </div>
+                    --->
                     <div class="row">
-                        <span>Fecha de Publicacion: </span>
+                        <span>Fecha de publicación: </span>
                         <p>{{(respuesta.FechaPublicacion) ?? 'No definida' }}</p>
                     </div>
                     <!-------------- Variable ---------------------->
@@ -53,20 +55,20 @@
                     </div>
                     <!----------------------------------------------->
                     <div class="row">
-                        <span>Fecha de Cierre: </span>
+                        <span>Fecha de cierre: </span>
                         <p>{{ (respuesta.FechaCerrada) ?? 'No definida' }}</p>
                     </div>
                 </div>
 
                 <div class="row">
-                    <span>URL:</span>
-                    <a href="http://www.mercadopublico.cl" target="_blank">www.mercadopublico.cl</a>
-
+                    <span>Abrir en: </span>
+                    <a :href="generateMercadoPublicoUrl(respuesta.CodigoExterno)" target="_blank">www.mercadopublico.cl</a>
                 </div>
             </div>
         </div>
     </div>
 </template>
+2665-102-L12
 <script>
 export default {
   props: {
@@ -99,7 +101,9 @@ export default {
                 return 'No definida';
             }
         },
-        
+        generateMercadoPublicoUrl(codigoExterno) {
+            return `http://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=${codigoExterno}`;
+        },
         capitalizeFirstLetter(value) {
             if (typeof value === 'string' && value.length > 0) {
                 return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
@@ -160,6 +164,7 @@ export default {
 }
 .row {
     display: flex;
+    flex-wrap: wrap; 
     padding-top: 10px;
     /* border-bottom: 1px solid #bebebf; */
     border-bottom: 1px solid #000000
@@ -177,6 +182,7 @@ export default {
     /* font-weight: bold; */
     font-size: 16px;
     font-family: monospace;
+    white-space: pre-wrap;
 }
 .footer{
     padding: 20px;

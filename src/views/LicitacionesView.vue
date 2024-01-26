@@ -10,7 +10,6 @@
             <div class="form-consulta">
                 <label class="mr-3">Estado:</label>
                 <select id="ets" name="ets" class="form-control mr-3" ref="ets" v-model="estado" @change="actualizarElementosPorEstado">
-                    <option value="Todos">Todos</option>
                     <option value="Publicada">Publicada</option>
                     <option value="Cerrada">Cerrada</option>
                     <option value="Desierta">Desierta</option>
@@ -91,7 +90,7 @@ export default {
             visiblePages: [],
             // estados
             elementosPorPagina: '25', // Valor predeterminado
-            estado: 'Todos',
+            estado: 'Publicada',
             //
             date:"",
             fecha_inicial: null,
@@ -111,7 +110,7 @@ export default {
         resetearValores() {
           this.fecha_inicial = null;
           this.fecha_final = null;
-          this.estado = 'Todos';
+          this.estado = 'Publicada';
           this.liciTodas();
         },
         actualizarBusquedaEnTiempoReal(data) {

@@ -11,7 +11,7 @@
             <LiCart :datos="datos" :listaDeSeguimiento="listaDeSeguimiento" @actualizar-lista-seguimiento="listFavorito" />
         </div>
         
-        <div v-if="articles.length === 0">
+        <div v-if="articles.length === 0" class="conteiner-texto">
             <p class="texto-li" v-if="!usuarioEstaLogueado">No hay licitaciones disponibles en este momento en la comuna {{ ciudad }}.</p>
             <p class="texto-li" v-if="usuarioEstaLogueado">No tienemos licitaciones disponibles en este momento en la comuna {{ ciudad }}.</p>
         </div>
@@ -122,7 +122,10 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
+.conteiner-texto{
+  text-align: center;
+}
 @keyframes loading {
   0% {
     transform: rotate(0deg);
@@ -153,5 +156,6 @@ export default {
   margin: auto;
   border: 1px solid rgba(255, 255, 255, 0.125);
   padding: 20px 25px;
+  text-decoration: underline;
 }
 </style>

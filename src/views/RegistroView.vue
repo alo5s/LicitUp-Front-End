@@ -31,8 +31,11 @@
                         <br>
 
                         <!-- Submit button -->
-                        <button type="submit" class="btn-usario">Registrar</button>
+                        <button type="submit" class="btn-usario" :disabled="cargando">Registrar</button>
 
+                        <div v-if="cargando" class="conteiner-cargar">
+                          <div class="cargando-login"></div>
+                        </div>
                         <!-- Sign up link -->
                     </div>
                 </form>
@@ -49,71 +52,88 @@ export default {
     return {
       correo: '',
       contraseña: '',
-      confirmar_contraseña: ''
+      confirmar_contraseña: '',
+      cargando: false, // Variable de carga
     };
   },
   methods: {
     async handleSubmit() {
       if (!this.correo || !this.contraseña || !this.confirmar_contraseña) {
-        this.$swal({
-          icon: 'error',
-          title: 'Error',
-          text: 'Por favor, completa todos los campos.'
-        });
+        this.mostrarAlerta('Error', 'Por favor, completa todos los campos.', 'error');
         return;
       }
 
       if (this.contraseña !== this.confirmar_contraseña) {
-        this.$swal({
-          icon: 'error',
-          title: 'Error',
-          text: 'Las contraseñas no coinciden.'
-        });
+        this.mostrarAlerta('Error', 'Las contraseñas no coinciden.', 'error');
         return;
       }
 
       try {
+        // Iniciar la carga
+        this.cargando = true;
+
         const response = await licitUp_bk.register(this.correo, this.contraseña);
         if (response.data.message === 'Usuario registrado exitosamente') {
-          this.$swal({
-            icon: 'success',
-            title: 'Éxito',
-            text: '¡Registro exitoso!'
-          });
+          this.mostrarAlerta('Éxito', '¡Te has registrado exitosamente!', 'success');
           // Guardar el token en una cookie
           const token = response.data.access_token;
           licitUp_bk.saveTokenToCookie(token);
           // Emitir un evento para actualizar el estado del usuario
           this.$root.$emit('updateUserStatus', true);
-          this.$router.push('/eventos' );
+          this.$router.push('/eventos');
         } else if (response.data.message === 'El correo electrónico ya existe') {
-          this.$swal({
-            icon: 'warning',
-            title: 'Advertencia',
-            text: 'El correo ya está registrado.'
-          });
+          this.mostrarAlerta('Advertencia', 'El correo ya está registrado.', 'warning');
         } else {
-          this.$swal({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un error en el registro. Por favor, inténtalo de nuevo más tarde.'
-          });
+          this.mostrarAlerta('Error', 'Hubo un error en el registro. Por favor, inténtalo de nuevo más tarde.', 'error');
         }
       } catch (error) {
         console.error('Error al registrar:', error);
-        this.$swal({
-          icon: 'error',
-          title: 'Error',
-          text: 'Hubo un error al registrar. Por favor, inténtalo de nuevo más tarde.'
-        });
+        this.mostrarAlerta('Error', 'Hubo un error al registrar. Por favor, inténtalo de nuevo más tarde.', 'error');
+      } finally {
+        // Detener la carga, independientemente del resultado
+        this.cargando = false;
       }
-    }
-  }
+    },
+    mostrarAlerta(title, text, icon) {
+      this.$swal({
+        title: title,
+        text: text,
+        icon: icon,
+      });
+    },
+  },
 };
+
 </script>
 
 
 <style scoped>
+
+/* carga */
+/* carga */
+.conteiner-cargar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(0 0 0 / 29%);/* Color de fondo semi-transparente para superponerse al formulario */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cargando-login{
+    border: 6px solid #fff;
+    border-radius: 100%;
+    border-top-color: #7967d2;
+    border-bottom-color: #7967d2;
+    width: 15rem;
+    height: 15rem;
+    animation: loading-1b5bf67c 1.5s infinite linear;
+}
+
+
+
 .height-100vh {
     height: 100vh;
 }

@@ -154,6 +154,21 @@ export default {
         const data = {"ls_comuna_fa":ls_comuna_fa, "ls_PsSs_fa":ls_PsSs_fa, 'ls_codificacións_fa':ls_codificacións_fa,'ls_parametos':ls_parametos}
         this.someAuthenticatedRequest();
         return axios.put(`${BASE_URL}perfil/datos/update`, data);
-    }
+    },
+
+    // administrador
+    adminDatos (){
+        return axios.post(`${BASE_URL}admin`); // Corregido Listo
+    },
+    adminSucri(corre, estado){
+        const data = {"correo":corre, "suscripcion":estado}
+        this.someAuthenticatedRequest();
+        return axios.post(`${BASE_URL}admin/activar`, data)
+    },
+    estadoUsuario(){
+        this.someAuthenticatedRequest();
+        return axios.post(`${BASE_URL}admin/estado`)
+    },
+
 }
 
