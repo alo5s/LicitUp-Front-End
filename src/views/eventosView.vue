@@ -35,9 +35,6 @@ export default {
       
     };
   },
-  mounted() {
-    this.datosCuestionarios();
-  },
   methods: {
     cambiarPagina(regresar = false) {
       if (regresar) {
@@ -84,15 +81,6 @@ export default {
 
     capturarParametros(parametosLicitacionesSeleccionados){
       this.parametosLicitacionesSeleccionados = parametosLicitacionesSeleccionados
-    },
-
-    async datosCuestionarios() {
-      try {
-        const response = await licitUp_bk.datoCuestionario();
-        this.datoComunas = response.data.comunas;
-      } catch (error) {
-        console.error('Error al realizar la consulta:', error);
-      }
     },
 
     async datosUsarioPreferencia(ls1, ls2, ls3, ls4){

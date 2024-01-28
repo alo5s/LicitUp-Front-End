@@ -70,8 +70,11 @@ export default {
   
   computed: {
     filteredComunas() {
+      // Filtrar solo las comunas que no han sido seleccionadas ni eliminadas
       return this.comunas.filter(comuna =>
-        comuna.toLowerCase().includes(this.comunaSeleccionada.toLowerCase())
+        comuna.toLowerCase().includes(this.comunaSeleccionada.toLowerCase()) &&
+        !this.comunasSeleccionadas.includes(comuna) &&
+        !this.datosPrevios.includes(comuna)
       );
     },
   },

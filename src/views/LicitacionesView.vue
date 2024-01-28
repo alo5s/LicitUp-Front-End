@@ -271,6 +271,7 @@ export default {
     color: #00000087;
     text-align: center;
 }
+
 .conteiner-paginado {
     display: flex;
     justify-content: center;

@@ -5,7 +5,7 @@
         <button>
           <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
         </button>
-        <input type="search-text" v-model="codigoBusqueda" @input="buscarEnTiempoReal" placeholder="Buscar Por Codigo o nombre ..."
+        <input type="search-text" v-model="codigoBusqueda" @input="buscarEnTiempoReal" placeholder="Buscar Por Código o nombre ..."
           name="search" />
       </div>
     </form>

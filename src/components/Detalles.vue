@@ -2,18 +2,18 @@
     <div class="popus">
         <div class="popups-inner">
             <div class="header">
-                <h2>Licitacion: {{ respuesta.CodigoExterno }}</h2>
+                <h2>Licitación: {{ respuesta.CodigoExterno }}</h2>
                 <button class="popup-close" @click="$emit('close')">
                     <font-awesome-icon :icon="['fas', 'xmark']" />
                 </button>
             </div>
             <div class="container">
-                <div class="row">
+                <div class="row span">
                     <span>Nombre:</span>
                     <p>{{ capitalizeFirstLetter(respuesta.Descriptive_name) ?? 'No definida' }}</p>
                 </div>
                 <div class="row">
-                    <span>Nombre del Oorganismo:</span>
+                    <span>Nombre del Organismo:</span>
                     <p>{{ capitalizeFirstLetter(respuesta.Nombre_del_Organismo) ?? 'No definida' }}</p>
                 </div>
                 <div class="row">
@@ -68,7 +68,8 @@
         </div>
     </div>
 </template>
-2665-102-L12
+
+
 <script>
 export default {
   props: {
@@ -126,7 +127,8 @@ export default {
             }
         }
     }
-  // Resto de la lógica de tu componente Detalles
+  // Resto de la lógica de tu componente Detalles 1658-61-L124  425-3-LQ24
+
 };
 </script>
 
@@ -146,9 +148,9 @@ export default {
     .popups-inner {
         background: #fff;
         padding: 32px;
-
+        
         width: 600px;
-        height: 470px;
+        height: auto;
 
         box-shadow: 0px 5px 5px rgb(0 0 0 / 70%);
         border-radius: 20px;

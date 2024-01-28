@@ -2,6 +2,14 @@
     <div class="comuna">
       <h1>Comuna: {{ ciudad }}</h1>
     </div>
+    <div class="conteiner-paginado">
+            <div v-if="pages > 1 ">
+                <button class="btn-paginado" @click="changePage(page - 1)">&lt;&lt;</button>
+                <button class="btn-paginado" v-for="pageNumber in visiblePages" :key="pageNumber" @click="changePage(pageNumber)"
+                        :class="{ 'active-page': pageNumber === page }"> {{ pageNumber }} </button>
+                <button class="btn-paginado" @click="changePage(page + 1)">&gt;&gt;</button>
+            </div>
+      </div>
     <div v-if="cargando" class="conteiner-cargar">
         <div class="cargando-login"></div>
     </div>
@@ -13,7 +21,7 @@
         
         <div v-if="articles.length === 0" class="conteiner-texto">
             <p class="texto-li" v-if="!usuarioEstaLogueado">No hay licitaciones disponibles en este momento en la comuna {{ ciudad }}.</p>
-            <p class="texto-li" v-if="usuarioEstaLogueado">No tienemos licitaciones disponibles en este momento en la comuna {{ ciudad }}.</p>
+            <p class="texto-li" v-if="usuarioEstaLogueado">No tenemos licitaciones disponibles en este momento en la comuna {{ ciudad }}.</p>
         </div>
         
         <div class="conteiner-paginado">
@@ -157,5 +165,47 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.125);
   padding: 20px 25px;
   text-decoration: underline;
+}
+
+
+.conteiner-paginado {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+.active-page {
+  background-color: #ffffff !important;  /* Cambia el color de fondo a blanco */
+  color: #000000; /* Cambia el color del texto a negro */
+  box-shadow: 2px 2px 0px 0px #9b9b9b;
+  border: 1px solid #9b9b9b !important;
+  transform: scale(1.05);
+  /* Otros estilos que desees aplicar a la página activa */
+}   
+
+.btn-paginado {
+    box-shadow: 2px 2px 0px 0px #9b9b9b;
+    padding: 15px 15px;
+    margin: 0px 10px;
+    background: #55B;
+    border: none;
+    font-size: 3vh;
+    border-radius: 10px;
+    cursor: pointer;
+    /* Cambio de cursor al pasar el ratón */
+    transition: background-color 0.3s, transform 0.3s;
+    /* Animación de cambio de color y escala */
+}
+
+.btn-paginado:hover {
+    background: white;
+    /* Cambio de color al pasar el ratón */
+    transform: scale(1.05);
+    /* Efecto de escala al pasar el ratón */
+    border: 1px solid #9b9b9b;
+}
+
+.btn-paginado:active {
+    transform: scale(0.95);
+    /* Efecto de clic (escala ligeramente hacia abajo) */
 }
 </style>

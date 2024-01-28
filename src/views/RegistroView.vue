@@ -11,21 +11,21 @@
                     <!-- Main container for all inputs -->
                     <div class="mainContainer">
                         <!-- Correo -->
-                        <label>Tu Correo</label>
-                        <input v-model="correo" type="email" placeholder="Ingrese un Correo" required
+                        <label>Su correo electrónico</label>
+                        <input v-model="correo" type="email" placeholder="Ingrese su correo electrónico" required
                             class="input-username">
 
                         <br><br>
 
                         <!-- Password -->
-                        <label>Tu contraseña</label>
-                        <input v-model="contraseña" type="password" placeholder="Ingrese su Password" required
+                        <label>Su contraseña</label>
+                        <input v-model="contraseña" type="password" placeholder="Ingrese su contraseña" required
                             class="input-password">
 
                         <br><br>
 
-                        <label>Repite tu contraseña</label>
-                        <input v-model="confirmar_contraseña" type="password" placeholder="Repita su Password" required
+                        <label>Repite su contraseña</label>
+                        <input v-model="confirmar_contraseña" type="password" placeholder="Repita su contraseña" required
                             class="input-password">
 
                         <br>

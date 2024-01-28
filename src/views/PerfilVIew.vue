@@ -141,7 +141,17 @@ export default {
     },
   },
   methods: {
-
+    mostrarAlertaDatoRepetido() {
+      // Mostrar mensaje de éxito
+      this.$swal({
+        icon: 'success',
+        title: 'Dato repetido.',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+    },
     formatNumber(value) {
       return value !== null && value !== undefined
         ? new Intl.NumberFormat('es-CL', {

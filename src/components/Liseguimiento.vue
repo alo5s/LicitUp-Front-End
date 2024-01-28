@@ -71,7 +71,7 @@
                         <p>{{ capitalizeFirstLetter(datos.ComunaUnidad) ?? 'No definida' }}</p>
                     </div>
                     <div class="mb-3">
-                        <span>Producto <del></del>emandado:</span>
+                        <span>Producto:</span>
                         <p>{{ capitalizeFirstLetter(datos.Producto) ?? 'No definida' }}</p>
                     </div>
                     <div class="mb-3">

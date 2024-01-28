@@ -39,11 +39,11 @@
                                 <label style="border-bottom: 1px solid #bebebf;">Fechas:</label>
                             </summary>
                             <div class="row">
-                                <span>Fecha de Creacion: </span>
+                                <span>Fecha de Creación: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaCreacion) ?? 'No definida' }}</p>
                             </div>
                             <div class="row">
-                                <span>Fecha de Publicacion: </span>
+                                <span>Fecha de Publicación: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaPublicacion) ?? 'No definida' }}</p>
                             </div>
                             <!-------------- Variable ---------------------->

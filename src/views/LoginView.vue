@@ -11,19 +11,19 @@
           <!-- Main container for all inputs -->
           <div class="mainContainer">
             <!-- Username -->
-            <label>Su nombre de usuario o Email</label>n
-            <input v-model="correo" type="text" placeholder="Enter Username o Email" required class="input-username">
+            <label>Su correo electrónico</label>n
+            <input v-model="correo" type="text" placeholder="Su correo electrónico" required class="input-username">
 
             <br><br>
 
             <!-- Password -->
-            <label>Tu contraseña</label>
-            <input v-model="contraseña" type="password" placeholder="Enter Password" required class="input-password">
+            <label>Su contraseña</label>
+            <input v-model="contraseña" type="password" placeholder="Ingresar Su contraseña" required class="input-password">
 
             <br>
 
             <!-- Submit button -->
-            <button class="btn-usario" type="submit">Iniciar sesion</button>
+            <button class="btn-usario" type="submit">Iniciar sesión</button>
 
             <!-- Sign up link -->
             <p class="register">¿No es un miembro? <router-link to="Registro">¡Registrar aquí!</router-link></p>

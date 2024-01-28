@@ -38,9 +38,9 @@ export default {
   data() {
     return {
       numLi: 20,
-      min: 1000, // Valor mínimo personalizado
-      max: 10000000, // Valor máximo personalizado
-      montoMinimo: 1000, // Valor actual del monto mínimo
+      min: 0, // Valor mínimo personalizado
+      max: 100000000, // Valor máximo personalizado
+      montoMinimo: 0, // Valor actual del monto mínimo
       montoMaximo: 1000000, // Valor actual del monto máximo
     };
   },
@@ -56,7 +56,8 @@ export default {
     },
     updateMinimo(event) {
       const value = parseInt(event.target.value);
-      if (!isNaN(value) && value <= this.montoMaximo) {
+      console.log("updateMinimo called with value:", value);
+      if (!isNaN(value) && (value <= this.montoMaximo || value === 0)){
         this.montoMinimo = value;
         this.$emit('montos-seleccionados', {
           min: this.montoMinimo,
