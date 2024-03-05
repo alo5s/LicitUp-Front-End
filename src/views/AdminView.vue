@@ -5,6 +5,7 @@
         <tr>
           <th>Usuario</th>
           <th>Suscripción</th>
+          <th>Borrar</th>
         </tr>
       </thead>
       <tbody>
@@ -16,6 +17,11 @@
               :class="{ 'activo': usuario.suscripcion, 'inactivo': !usuario.suscripcion }"
             >
               {{ usuario.suscripcion ? 'Suscripto' : 'No suscripto' }}
+            </button>
+          </td>
+          <td>
+            <button class="btn-delete" @click="confirmarBorrarUsuario(usuario.correo)">
+              Borrar
             </button>
           </td>
         </tr>
@@ -46,6 +52,29 @@ export default {
                 console.error("Error al obtener datos en fetchData:", error);
             }
         },
+        async confirmarBorrarUsuario(correo) {
+            const confirmacion = await this.$swal({
+                title: '¿Está seguro de realizar estos cambios?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, borrar usuario',
+                cancelButtonText: 'No, cancelar',
+            });
+            if (confirmacion.value) {
+                // Si el usuario confirma, se llama al método para borrar el usuario
+                this.borrarUsuario(correo);
+            }
+        },
+        async borrarUsuario(correo) {
+            try {
+                await licitUp_bk.adminDelete_usario(correo);
+                // Actualizar localmente la lista de usuarios después de borrar uno
+                this.lista_usuarios = this.lista_usuarios.filter(usuario => usuario.correo !== correo);
+            } catch (error) {
+                console.error("Error al borrar usuario:", error);
+            }
+        },
         async actualizarSuscripcion(correo, nuevoEstado) {
             try {
                 await licitUp_bk.adminSucri(correo, nuevoEstado);               
@@ -65,6 +94,11 @@ export default {
 
 
 <style scoped>
+  .btn-dalete {
+    background-color: rgb(199, 56, 56);
+    color: white;
+  }
+
   .table-container {
     display: flex;
     justify-content: center;

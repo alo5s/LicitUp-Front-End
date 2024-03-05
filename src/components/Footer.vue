@@ -19,7 +19,7 @@
 
   <div>
     <i class="fa fa-map-marker"></i>
-    <p><span>100 M. Cedros Ave</span> Santiago de Chile</p>
+    <p>Santiago de Chile</p>
   </div>
 
   <div>

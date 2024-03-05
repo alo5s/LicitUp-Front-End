@@ -165,6 +165,11 @@ export default {
         this.someAuthenticatedRequest();
         return axios.post(`${BASE_URL}admin/activar`, data)
     },
+    adminDelete_usario(corre){
+        const data = {"correo":corre}
+        this.someAuthenticatedRequest();
+        return axios.post(`${BASE_URL}admin/delete/usuario`, data)
+    },
     estadoUsuario(){
         this.someAuthenticatedRequest();
         return axios.post(`${BASE_URL}admin/estado`)

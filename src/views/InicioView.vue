@@ -29,6 +29,8 @@ export default {
     mounted() {
         this.fetchData()
         this.mostrarFechaChile();
+        // Llamar a fetchData cada 3 minutos
+        setInterval(this.fetchData, 180000); // 180000 milisegundos = 3 minutos
     },
 
     methods: {

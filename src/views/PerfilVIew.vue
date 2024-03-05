@@ -254,6 +254,67 @@ export default {
     },
 
     guardarCambios() {
+      // Filtra elementos vacíos antes de asignar a this.productos
+      this.productos = this.productos.filter(producto => producto.trim() !== '');
+      this.ciudades = this.ciudades.filter(comuna => comuna.trim() !== '');
+      this.ls_codifi = this.ls_codifi.filter(codi => codi.trim() !== '');
+
+      // Verificar si la lista de productos está vacía
+      if (this.productos.length === 0) {
+        // Mostrar alerta de error
+        this.$swal({
+          title: 'Error',
+          text: 'Debe tener al menos un producto o servicio en su perfil.',
+          icon: 'error',
+          timer: 5000,
+          timerProgressBar: true,
+        });
+        return; // No permite continuar si hay un error
+      }
+
+      if (this.ciudades.length === 0) {
+        // Mostrar alerta de error
+        this.$swal({
+          title: 'Error',
+          text: 'Debe tener al menos una Comuna en su perfil.',
+          icon: 'error',
+          timer: 5000,
+          timerProgressBar: true,
+        });
+        return; // No permite continuar si hay un error
+      }
+
+
+      if (this.ls_codifi.length === 0) {
+        // Mostrar alerta de error
+        this.$swal({
+          title: 'Error',
+          text: 'Debe tener al menos un Tipos Licitaciones en su perfil.',
+          icon: 'error',
+          timer: 5000,
+          timerProgressBar: true,
+        });
+        return; // No permite continuar si hay un error
+      }
+
+      // Verificar si hay productos duplicados
+      const productosDuplicados = this.productos.filter((producto, index) => {
+        const productoEnMinuscula = producto.toLowerCase();
+        // Compara el producto actual con los productos anteriores (en minúsculas)
+        return this.productos.slice(0, index).some(p => p.toLowerCase() === productoEnMinuscula);
+      });
+      if (productosDuplicados.length > 0) {
+        // Mostrar mensaje de error si hay productos duplicados
+        this.$swal({
+          title: 'Error',
+          text: `Se encontraron productos duplicados: ${productosDuplicados.join(', ')}`,
+          icon: 'error',
+          timer: 5000,
+          timerProgressBar: true,
+        });
+        return; // No permite continuar si hay un error
+      }
+      
       // Validar que mon_max sea mayor que mon_min
       if (this.mon_max !== null && this.mon_min !== null && this.mon_max <= this.mon_min) {
         this.$swal({
@@ -277,7 +338,7 @@ export default {
         });
         return; // No permite continuar si hay un error
       }
-
+      
       this.$swal({
         title: '¿Está seguro de realizar estos cambios?',
         text: 'Esta acción guardará los cambios en su perfil.',
@@ -324,6 +385,8 @@ export default {
         }
       });
     },
+
+
     async handleLogout() {
       // Mostrar cuadro de diálogo de confirmación
       const result = await this.$swal({
