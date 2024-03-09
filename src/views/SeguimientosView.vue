@@ -1,33 +1,35 @@
 <template>
   <div>
     <Search @busqueda-en-tiempo-real="actualizarBusquedaEnTiempoReal" />
-    
-    <div v-for="datos in filteredArticles" :key="datos.CodigoExterno" class="carousel-item">
+    <div class="center">
+      <div v-for="licitacion in filteredArticles" :key="licitacion.CodigoExterno" class="carousel-item">
       <div class="conteiner">
-        <button  v-if="datos.mostrarOrdenCompra" @click="mostrarOrdenCompra(datos)">
-          <font-awesome-icon :icon="['fas', 'arrow-left']" />        
-        </button>
+        <div v-if="licitacion.id_orden_compra !== null">
+          <button v-if="licitacion.mostrarOrdenCompra" @click="mostrarOrdenCompra(licitacion)" class="btn-arrow-left">
+            <font-awesome-icon :icon="['fas', 'arrow-left']" />        
+          </button>
+        </div>
         <div>
-          <Lisigumiento v-if="!datos.mostrarOrdenCompra" :datos="datos" @confirmar-dejar-de-seguir="dejarDeSeguirLicitacion" />
-        </div>
-        <div v-if="datos.mostrarOrdenCompra" class="orden-compra">
-          <div class="overlay">
-            <h1>No hay dato</h1>
+          <div>
+            <Lisigumiento v-if="!licitacion.mostrarOrdenCompra" :datos="licitacion" @confirmar-dejar-de-seguir="dejarDeSeguirLicitacion" />
           </div>
-          <div class="orden-compra-content">
-            <Ordencompra :datos="datos" />
+          <div  v-if="licitacion.mostrarOrdenCompra">
+            <Ordencompra :datos="licitacion.ordenCompra ? licitacion.ordenCompra : {}" />
           </div>
         </div>
-        <button @click="mostrarOrdenCompra(datos)" v-if="datos.mostrarOrdenCompra">
-          <font-awesome-icon :icon="['fas', 'arrow-right']" />
-        </button>
+        
+        <div v-if="licitacion.id_orden_compra !== null">
+          <button @click="mostrarOrdenCompra(licitacion)" v-if="!licitacion.mostrarOrdenCompra" class="btn-arrow-right">
+            <font-awesome-icon :icon="['fas', 'arrow-right']" />
+          </button>
+        </div>
       </div>
-      <div class="circulos" v-if="datos.mostrarOrdenCompra">
-        <span :class="{ activo: !datos.mostrarOrdenCompra }"></span>
-        <span :class="{ activo: datos.mostrarOrdenCompra }"></span>
+      <div class="circulos" v-if="licitacion.id_orden_compra !== null">
+        <span :class="{ activo: !licitacion.mostrarOrdenCompra }"></span>
+        <span :class="{ activo: licitacion.mostrarOrdenCompra }"></span>
       </div>
     </div>
-    
+    </div>
   </div>
 </template>
 
@@ -36,7 +38,6 @@ import licitUp_bk from '../authentication/licitup_request';
 import Search from '../components/Search.vue';
 import Lisigumiento from '../components/Liseguimiento.vue';
 import Ordencompra from '../components/Ordencompra.vue'
-
 export default {
   components: {
     Search,
@@ -67,71 +68,92 @@ export default {
     },
   },
   methods: {
-    async mostrarOrdenCompra(datos) {
-      try {
-        const response = await licitUp_bk.estadoUsuario()
-        console.log(response.data.estado[0])
-        // Verificar el estado del usuario
-        if (response.data.estado[0]) {
-          // Oculta Lisigumiento y muestra Ordencompra
-          datos.mostrarOrdenCompra = !datos.mostrarOrdenCompra;
-
-          // Si se está mostrando la Orden de Compra, oculta Lisigumiento
-          if (datos.mostrarOrdenCompra) {
-            datos.mostrarLisigumiento = false;
-          }
-        } else {
-          // Mostrar alerta indicando que la función es para usuarios con suscripción
-          this.mostrarAlertaSuscripcion();
-        }
-      } catch (error) {
-        console.error('Error al obtener estado del usuario:', error);
-        // Mostrar alerta de error
-        this.mostrarAlertaError();
-      }
-    },
-
-    async iniciarNotificacion() {
-      try {
-        const response = await licitUp_bk.eventNotificacion();
-        const { notificacion_activa } = response.data;
-        if (notificacion_activa) {
-          this.activarNotificacion();
-          this.notificacion = true;
-          // Configurar el temporizador para resetear la notificación después de 1 minuto
-          setTimeout(() => {
-            window.focus();
-            this.notificacion = false;
-          }, 60000); // 1 minuto (60 * 1000 ms)
-        }
-      } catch (error) {
-        console.error('Error al realizar la consulta:', error);
-      }
-    },
-
-    activarNotificacion() {
-      if (Notification.permission === 'granted') {
-        const options = {
-          body: 'Este es el cuerpo de la notificación',
-          icon: 'icon.png',
-        };
-        const notification = new Notification('Seguimiento Actualizado', options);
-      }
-    },
-
-    async SegumientoLiciTodas() {
-      try {
-        const response = await licitUp_bk.segumientoLicit();
-        this.articles = response.data.licitationes;
-      } catch (error) {
-        console.error('Error al realizar la consulta:', error);
-      }
-    },
 
     actualizarBusquedaEnTiempoReal(data) {
       this.filtro = data;
     },
 
+    async mostrarOrdenCompra(licitacion) {
+      try {
+          let estadoUsuario = this.getEstadoUsuarioFromCookie(); // Obtener el estado del usuario desde la cookie
+          if (!estadoUsuario) {
+              // Si no hay estado en la cookie o ha expirado, hacer la consulta al backend
+              const response = await licitUp_bk.estadoUsuario();
+              estadoUsuario = response.data.estado[0];
+              // Guardar el estado del usuario en la cookie con un tiempo de expiración de 3 minutos
+              this.setEstadoUsuarioCookie(estadoUsuario);
+              // Establecer el temporizador para que la cookie expire después de 3 minutos
+              setTimeout(() => {
+                  this.removeEstadoUsuarioCookie();
+              }, 3 * 60 * 1000); // 3 minutos en milisegundos
+          }
+
+          console.log(estadoUsuario);
+
+          if (estadoUsuario) {
+              // Oculta Lisigumiento y muestra Ordencompra
+              licitacion.mostrarOrdenCompra = !licitacion.mostrarOrdenCompra;
+              // Si se está mostrando la Orden de Compra, oculta Lisigumiento
+              if (licitacion.mostrarOrdenCompra) {
+                  licitacion.mostrarLisigumiento = false;
+              }
+          } else {
+              // Mostrar alerta indicando que la función es para usuarios con suscripción
+              this.mostrarAlertaSuscripcion();
+          }
+      } catch (error) {
+          console.error('Error al obtener estado del usuario:', error);
+          // Mostrar alerta de error
+          this.mostrarAlertaError();
+      }
+  },
+  getEstadoUsuarioFromCookie() {
+      // Obtener todas las cookies
+      const cookies = document.cookie;
+      if (cookies) {
+          // Buscar la cookie 'estadoUsuario'
+          const cookieEstadoUsuario = cookies.split('; ').find(row => row.startsWith('estadoUsuario='));
+          if (cookieEstadoUsuario) {
+              // Si se encuentra la cookie 'estadoUsuario', obtener su valor
+              return cookieEstadoUsuario.split('=')[1];
+          }
+      }
+      // Si la cookie 'estadoUsuario' no está presente, devolver null
+      return null;
+    },
+    setEstadoUsuarioCookie(estadoUsuario) {
+        // Guardar el estado del usuario en la cookie con un tiempo de expiración de 3 minutos
+        document.cookie = `estadoUsuario=${estadoUsuario};max-age=180`; // 3 minutos en segundos
+    },
+    removeEstadoUsuarioCookie() {
+        // Eliminar la cookie del estado del usuario
+        document.cookie = "estadoUsuario=;max-age=0";
+    },
+
+    async SegumientoLiciTodas() {
+      try {
+        const response = await licitUp_bk.segumientoLicit();
+        const { licitaciones, ordenes_de_compra } = response.data;
+        
+        for (const licitacion of licitaciones) {
+          // Agregar propiedad mostrarOrdenCompra
+          licitacion.mostrarOrdenCompra = false;
+          
+          console.log('Código externo de la licitación:', licitacion.CodigoExterno);
+
+
+          // Buscar la orden de compra asociada
+          const ordenCompra = ordenes_de_compra.find(orden => orden.id === licitacion.id_orden_compra);
+
+          // licitacion.ordenCompra = ordenCompra;
+          licitacion.ordenCompra = ordenCompra || null; // Asignar null si no se encuentra la orden de compra        
+          this.articles.push(licitacion);
+        }
+      } catch (error) {
+        console.error('Error al realizar la consulta:', error);
+      }
+    },
+    
     async dejarDeSeguirLicitacion(datos) {
       try {
         const codigoExterno = datos.CodigoExterno;
@@ -149,7 +171,6 @@ export default {
         this.mostrarAlertaError();
       }
     },
-
     mostrarAlertaExito() {
       this.$swal({
         icon: 'success',
@@ -176,8 +197,9 @@ export default {
     mostrarAlertaError() {
       this.$swal('Error', 'Hubo un error al realizar la acción', 'error');
     },
-  },
-};
+
+  }
+}
 </script>
 
 
@@ -260,11 +282,19 @@ export default {
 }
 
 /* Estilos para los botones de flecha */
-button {
+.btn-arrow-right {
+  position: absolute;
   font-size: 4vh;
   background: none;
   border: none;
   margin: 0px 5px;
+}
+.btn-arrow-left{
+  position: absolute;
+  font-size: 4vh;
+  background: none;
+  border: none;
+  margin: 0px -30px;
 }
 
 </style>

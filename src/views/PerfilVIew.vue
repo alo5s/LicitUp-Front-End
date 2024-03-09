@@ -460,7 +460,7 @@ export default {
   display: flex;
 }
 .conteriner-data div input {
-  width: 40%;
+  width: 45%;
   border: none;
 }
 .conteriner-data div label {

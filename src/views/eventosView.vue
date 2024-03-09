@@ -62,6 +62,10 @@ export default {
           );
           this.mostrarAlertaExito();
           this.$router.push('/');
+          // Emitir un evento para actualizar el estado del usuario
+          this.$root.$emit('updateUserStatus', true);
+          // Redirigir a la página principal
+          window.location.href = "/";
 
         }
       }

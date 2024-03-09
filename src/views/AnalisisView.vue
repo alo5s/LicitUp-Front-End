@@ -36,7 +36,7 @@ export default {
           id: "vuechart-example",
         },
         title: {
-          text: 'Análisis exponencial para predecir productos mas demandado del 2023',
+          text: 'Análisis exponencial para predecir productos mas demandado del 2024',
           align: 'center',
           style: {
             fontSize: "14px",

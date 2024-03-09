@@ -16,7 +16,7 @@
               @click="actualizarSuscripcion(usuario.correo, !usuario.suscripcion)"
               :class="{ 'activo': usuario.suscripcion, 'inactivo': !usuario.suscripcion }"
             >
-              {{ usuario.suscripcion ? 'Suscripto' : 'No suscripto' }}
+              {{ usuario.suscripcion ? 'Suscrito' : 'No Suscrito' }}
             </button>
           </td>
           <td>

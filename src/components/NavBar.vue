@@ -100,11 +100,11 @@ export default {
 
 .link:hover {
   transition: 0.5s;
+  color: rgb(0, 0, 0);
   border-radius: 25vh;
   cursor: pointer;
+  background: #fff;
 }
-
-
 
 
 header {
@@ -172,6 +172,11 @@ header .logo {
 @media all and (max-width: 1116px) {
   header {
     display: block;
+  }
+  .link:hover {
+    transition: 0.5s;
+    border-radius: 25vh;
+    cursor: pointer;
   }
 
   .btn-menu {

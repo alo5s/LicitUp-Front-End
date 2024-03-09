@@ -39,12 +39,6 @@
                             <summary>
                                 <label style="border-bottom: 1px solid #bebebf;">Fechas:</label>
                             </summary>
-                            <!--
-                            <div class="row">
-                                <span>Fecha de Creacion: </span>
-                                <p>{{ capitalizeFirstLetter(datos.FechaCreacion) ?? 'No definida' }}</p>
-                            </div>
-                            -->
                             <div class="row">
                                 <span>Fecha de publicación: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaPublicacion) ?? 'No definida' }}</p>
@@ -60,7 +54,6 @@
                                 <p>{{ capitalizeFirstLetter(datos.FechaCerrada) ?? 'No definida' }}</p>
                             </div>
                         </div>
-                        
                     </div>
                     <div class="mb-3">
                         <span>Estado actual:</span>
@@ -76,8 +69,7 @@
                     </div>
                     <div class="mb-3">
                         <span>Preció del producto:</span>
-                        <p>{{ formatNumber(capitalizeFirstLetter(datos.Precio) ?? 'No definida') }}</p>
-
+                        <p>{{ PesosChileno(datos.Precio) ?? 'No definida' }}</p>
                     </div>
                 </div>
               </div>
@@ -152,6 +144,7 @@ export default {
 
     mostrarDetalles() {
       this.detallesVisible = !this.detallesVisible; // Alternar la visibilidad
+      console.log(this.datos)
     },
     capitalizeFirstLetter(value) {
       if (!value) return 'No definida';
@@ -179,15 +172,30 @@ export default {
         return 'No definida';
       }
     },
+    PesosChileno(monto) {
+            if (monto !== undefined && monto !== null) {
+                // Formatear el monto como moneda chilena
+                const formatter = new Intl.NumberFormat('es-CL', {
+                    style: 'currency',
+                    currency: 'CLP',
+                    minimumFractionDigits: 0
+                });
+
+                return formatter.format(monto);
+            } else {
+                return 'No definida';
+            }
+        },
+
     mostrarAlertaConfirmacion() {
       this.$swal({
-        title: '¿Estás seguro?',
+        title: '¿Desea dejar de seguir?',
         text: 'No podrás recibir notificaciones si dejas de seguir esta licitación.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sí',
         cancelButtonText: 'No',
-        reverseButtons: true,
+        reverseButtons: false,
       }).then((result) => {
         if (result.isConfirmed) {
           this.$emit('confirmar-dejar-de-seguir', this.datos);

@@ -20,7 +20,7 @@
               class="select"
               v-model="productoServicioSeleccionada"
               list="productosServiciosList"
-              placeholder="ejmplo Motores o Reparacion .."
+              placeholder="Ejemplo Motores o Reparacion .."
             />
             <!-- 
             <datalist id="productosServiciosList">

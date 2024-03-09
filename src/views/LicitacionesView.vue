@@ -178,6 +178,7 @@ export default {
                     this.articles = response.data.licitaciones_pagina; // Actualiza los resultados
                     this.pages = response.data.total_paginas;
                     
+                    
                 
                     const startPage = Math.max(1, this.page - 3);
                     const endPage = Math.min(this.pages, startPage + 4);
@@ -195,24 +196,31 @@ export default {
                 const isUserAuthenticated = licitUp_bk.isAuthenticated();
                 this.usuarioEstaLogueado = isUserAuthenticated;
                 
+                let totalLicitaciones = 0; // Variable para almacenar el total de licitaciones
+
                 if (isUserAuthenticated) {
                     // Si el usuario está logueado, realiza la consulta a perfil_licitaciones
                     const response = await licitUp_bk.perfil_licitaciones(this.page);
                     this.articles = response.data.licitaciones_pagina;
                     this.pages = response.data.total_paginas;
+
+                    totalLicitaciones = response.data.total_licitaciones;
                     
                 } else {
                     // Si el usuario no está logueado, realiza la consulta normal a licitaciones
                     const response = await licitUp_bk.licitaciones(this.page, this.orden, this.estado, this.fecha_inicial, this.fecha_final);
                     this.articles = response.data.licitaciones_pagina;
                     this.pages = response.data.total_paginas;
-                    console.log(this.estado);
 
+                    totalLicitaciones = response.data.total_licitaciones;
                 }
             
                 const startPage = Math.max(1, this.page - 3);
                 const endPage = Math.min(this.pages, startPage + 4);
                 this.visiblePages = Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
+                
+                // Mostrar el mensaje de éxito con el número total de licitaciones
+                this.mostrarTotalLicitacion(totalLicitaciones);
             
             } catch (error) {
                 console.error('Error al realizar la consulta:', error);
@@ -233,6 +241,20 @@ export default {
                 // Cargar los datos de la nueva página después del desplazamiento
                 this.liciTodas();
             }
+        },
+        mostrarTotalLicitacion(totalLicitaciones) {
+            // Obtener el número total de licitaciones
+            // const totalLicitaciones = this.articles.length;
+
+            // Mostrar un mensaje con el número total de licitaciones
+            this.$swal({
+                title: `Número de licitaciones: ${totalLicitaciones}`,
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                color: "#ffffff",
+                background: "#2c2c55",
+            });
         },
     },
 };

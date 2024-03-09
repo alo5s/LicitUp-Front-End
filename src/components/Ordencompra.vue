@@ -14,7 +14,7 @@
                         <div class="progreso-contenedor">
                             <div class="progreso" :style="{width: progresoWidth}"></div>
                             <div class="tooltip" >
-                              <span  v-if="datos.Estado === 'Publicada'" class="tooltiptext">{{ tooltipText }}</span>
+                              <span  v-if="datos.Estado === 'enviadaproveedor'" class="tooltiptext">{{ tooltipText }}</span>
                               <div :class="{ 'circulo': true, 'active': circulo1 }">1</div>
                             </div>
                             <div class="tooltip">
@@ -23,7 +23,7 @@
 
                             </div>
                             <div class="tooltip">
-                              <span v-if="datos.Estado === 'Cerrada'" class="tooltiptext">{{ tooltipText }}</span>
+                              <span v-if="datos.Estado === 'Aceptada'" class="tooltiptext">{{ tooltipText }}</span>
                               <div :class="{ 'circulo': true, 'active': circulo3 }">3</div>
                             </div>
                         </div>
@@ -34,46 +34,44 @@
                 </summary>
                 <div class="data conteiner-dettalle" v-if="detallesVisible">
                     <div class="mb-3">
-                        <div>
+                      <div>
                             <summary>
                                 <label style="border-bottom: 1px solid #bebebf;">Fechas:</label>
                             </summary>
                             <div class="row">
-                                <span>Fecha de Creación: </span>
+                                <span>Fecha de Creacion: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaCreacion) ?? 'No definida' }}</p>
                             </div>
-                            <div class="row">
-                                <span>Fecha de Publicación: </span>
-                                <p>{{ capitalizeFirstLetter(datos.FechaPublicacion) ?? 'No definida' }}</p>
+                            <div class="row" v-if="!datos.FechaCancelacion">
+                                <span>Fecha de Modificacion: </span>
+                                <p>{{ capitalizeFirstLetter(datos.FechaUltimaModificacion)}}</p>
                             </div>
                             <!-------------- Variable ---------------------->
-                            <div class="row">
-                              <span>{{ mostrarFecha(0) }}</span>
-                              <p>{{ mostrarFecha(1) }}</p>
+                            <div class="row" v-if="!datos.FechaCancelacion">
+                                <span>Fecha de Envio: </span>
+                                <p>{{ capitalizeFirstLetter(datos.FechaEnvio)}}</p>
+                            </div>
+                            <div class="row" v-if="datos.FechaCancelacion !== null">
+                                <span>Fecha de Cancelacion: </span>
+                                <p>{{ capitalizeFirstLetter(datos.FechaCancelacion)}}</p>
                             </div>
                             <!----------------------------------------------->
-                            <div class="row">
-                                <span>Fecha de Cierre: </span>
-                                <p>{{ capitalizeFirstLetter(datos.FechaCerrada) ?? 'No definida' }}</p>
+                            <div class="row" v-if="!datos.FechaCancelacion">
+                                <span>Fecha de Aceptacion: </span>
+                                <p>{{ capitalizeFirstLetter(datos.FechaAceptacion) ?? 'No definida' }}</p>
                             </div>
                         </div>
-                        
                     </div>
                     <div class="mb-3">
                         <span>Estado actual:</span>
                         <p>{{ capitalizeFirstLetter(datos.Estado) ?? 'No definida' }}</p>
                     </div>
                     <div class="mb-3">
-                        <span>Ubicación:</span>
-                        <p>{{ capitalizeFirstLetter(datos.ComunaUnidad) ?? 'No definida' }}</p>
+                        <span>Nombre del Organismo:</span>
+                        <p>{{ capitalizeFirstLetter(datos.Nombre_del_Organismo) ?? 'No definida' }}</p>
                     </div>
                     <div class="mb-3">
-                        <span>Producto Demandado:</span>
-                        <p>{{ capitalizeFirstLetter(datos.Producto) ?? 'No definida' }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <span>Preció del Producto:</span>
-                        <p>{{ capitalizeFirstLetter(datos.Precio) ?? 'No definida' }}</p>
+                        <a :href="generateMercadoPublicoUrl(datos.CodigoExterno)" target="_blank">Ver orden de compra</a>
                     </div>
                 </div>
               </div>
@@ -99,21 +97,21 @@ export default {
   },
   computed: {
   progresoWidth() {
-      if (this.datos.Estado === 'Publicada') {
+      if (this.datos.Estado === 'enviadaproveedor') {
         return 0;
-      } else if (this.datos.Estado === 'Adjudicada' || this.datos.Estado === 'Revocada'|| this.datos.Estado === 'Desierta' ) {
+      } else if (this.datos.Estado === 'cancelada' || this.datos.Estado === 'pendienterecepcion'|| this.datos.Estado === 'pendienterecepcion'|| this.datos.Estado === 'recepecionconformeincompleta' ) {
         return '50%';
-      } else if (this.datos.Estado === 'Cerrada') {
+      } else if (this.datos.Estado === 'Aceptada') {
         return '99%';
       }
     },
   tooltipText() {
       if (this.datos.Estado === 'Publicada') {
         return 'Publicada';
-      } else if (this.datos.Estado === 'Adjudicada' || this.datos.Estado === 'Revocada') {
+      } else if (this.datos.Estado === 'cancelada' || this.datos.Estado === 'pendienterecepcion') {
         return this.datos.Estado;
-      } else if (this.datos.Estado === 'Cerrada') {
-        return 'Cerrada';
+      } else if (this.datos.Estado === 'Aceptada') {
+        return 'Aceptada';
       } else {
         return 'Estado no definido';
       }
@@ -124,9 +122,9 @@ export default {
   },
   methods: {
   actualizarCirculosActivos() {
-    this.circulo1 = this.datos.Estado === 'Publicada';
-    this.circulo2 = ['Adjudicada', 'Revocada', 'Desierta'].includes(this.datos.Estado);
-    this.circulo3 = this.datos.Estado === 'Cerrada';
+    this.circulo1 = this.datos.Estado === 'enviadaproveedor';
+    this.circulo2 = ['cancelada', 'recepcionconforme', 'pendienterecepcion', 'pendienterecepcion', 'recepecionconformeincompleta'].includes(this.datos.Estado);
+    this.circulo3 = this.datos.Estado === 'Aceptada';
 
     if (this.circulo3) {
       this.circulo2 = true;
@@ -136,6 +134,9 @@ export default {
       this.circulo1 = true;
     }
   },
+  generateMercadoPublicoUrl(codigoExterno) {
+            return `https://www.mercadopublico.cl/Portal/Modules/Site/Busquedas/BuscadorAvanzado.aspx?qs=1`;
+        },
 
     mostrarDetalles() {
       this.detallesVisible = !this.detallesVisible; // Alternar la visibilidad
@@ -146,10 +147,9 @@ export default {
     },
     mostrarFecha(index) {
       const fechas = {
-        FechaAdjudicacion: "Fecha de Adjudicación",
-        FechaDesierta: "Fecha de Desierta",
-        FechaRevocada: "Fecha de Revocada",
-        FechaSuspendido: "Fecha de Suspendido",
+        FechaCancelacion: "Fecha de Cancelacion",
+        FechaEnvio: "Fecha de Envio",
+
       };
 
       const fechaKey = Object.keys(fechas).find(
