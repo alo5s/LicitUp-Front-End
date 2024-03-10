@@ -1,6 +1,7 @@
 <template>
   <div class="table-container">
-    <table>
+    <div class="scrollable-table">
+      <table >
       <thead>
         <tr>
           <th>Usuario</th>
@@ -8,7 +9,7 @@
           <th>Borrar</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody >
         <tr v-for="usuario in lista_usuarios" :key="usuario.correo">
           <td>{{ usuario.correo }}</td>
           <td>
@@ -27,6 +28,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </template>
 
@@ -102,13 +104,18 @@ export default {
   .table-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 40vh;
+    margin: 5%;
+  }
+  
+  .scrollable-table {
+    overflow-y: auto; /* Agrega una barra de desplazamiento vertical */
+    max-height: 400px; /* Establece la altura máxima para mostrar la barra de desplazamiento */
+    width: 65%; /* Asegura que el contenedor ocupe todo el ancho disponible */
   }
 
   table {
     border-collapse: collapse;
-    width: 60%;
+    width: 100%;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }

@@ -42,7 +42,7 @@
                                 <span>Fecha de Creacion: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaCreacion) ?? 'No definida' }}</p>
                             </div>
-                            <div class="row" v-if="!datos.FechaCancelacion">
+                            <div class="row" v-if="!datos.FechaCancelacion && datos.FechaUltimaModificacion !== null">
                                 <span>Fecha de Modificacion: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaUltimaModificacion)}}</p>
                             </div>
