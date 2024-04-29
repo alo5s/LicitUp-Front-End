@@ -43,6 +43,18 @@
                                 <span>Fecha de publicación: </span>
                                 <p>{{ capitalizeFirstLetter(datos.FechaPublicacion) ?? 'No definida' }}</p>
                             </div>
+                            <div class="row">
+                                <span>Fecha inicio de preguntas: </span>
+                                <p>{{(datos.FechaInicio) ?? 'No definida' }}</p>
+                            </div>
+                            <div class="row">
+                                <span>Fecha final de preguntas: </span>
+                                <p>{{(datos.FechaFinal) ?? 'No definida' }}</p>
+                            </div>
+                            <div class="row">
+                                <span>Fecha de publicación de respuestas:</span>
+                                <p>{{(datos.FechaPubRespuestas) ?? 'No definida' }}</p>
+                            </div>
                             <!-------------- Variable ---------------------->
                             <div class="row">
                               <span>{{ mostrarFecha(0) }}</span>

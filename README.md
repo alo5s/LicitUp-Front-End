@@ -28,7 +28,7 @@ LicitUp es una aplicación diseñada para simplificar el proceso de licitación,
 
 ## Uso
 
-1. Inicia la aplicación: `npm run serve`
+1. Inicia la aplicación: `npm run dev`
 2. Abre tu navegador y visita: `http://localhost:8080`
 
 ## Contribuciones

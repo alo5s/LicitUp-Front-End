@@ -11,14 +11,14 @@
           <!-- Main container for all inputs -->
           <div class="mainContainer">
             <!-- Username -->
-            <label>Su correo electrónico</label>n
+            <label>Su correo electrónico</label>
             <input v-model="correo" type="text" placeholder="Su correo electrónico" required class="input-username">
 
             <br><br>
 
             <!-- Password -->
             <label>Su contraseña</label>
-            <input v-model="contraseña" type="password" placeholder="Ingresar Su contraseña" required class="input-password">
+            <input v-model="contraseña" type="password" placeholder="Su contraseña" required class="input-password">
 
             <br>
 

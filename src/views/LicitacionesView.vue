@@ -19,8 +19,9 @@
                 </select>
                 <label class="mr-3" >Fecha inicial</label>
                 <input type="date" class="form-control mr-3" v-model="fecha_inicial" :max="getMaxStartDate()"  @change="actualizarElementosPorFechas('inicio')">
+                
                 <label class="mr-3">Fecha Final</label>
-                <input type="date" class="form-control mr-3" v-model="fecha_final" @change="actualizarElementosPorFechas('final')">
+                <input type="date" class="form-control mr-3" v-model="fecha_final" :min="fecha_inicial" @change="actualizarElementosPorFechas('final')">
             </div>
             <div class="button-container">
               <button class="mr-3 btn-reset" @click="resetearValores">Limpiar Filtro</button>
@@ -140,21 +141,22 @@ export default {
         },
   
         actualizarElementosPorFechas(seleccion) {
-            // console.log("La función actualizarElementosPorFechas se ha llamado para:", seleccion);
-
-            // Verifica si la selección es "inicio" o "final" y si la fecha correspondiente está definida y es válida
             if (seleccion === 'inicio' && this.fecha_inicial) {
                 // Llama a la función para enviar al backend la fecha de inicio
-                
             } else if (seleccion === 'final' && this.fecha_final) {
+                // Verifica si la fecha final es anterior a la fecha inicial
+                if (this.fecha_inicial && this.fecha_final < this.fecha_inicial) {
+                    // Si la fecha final es anterior, establece la fecha final como igual a la fecha inicial
+                    this.fecha_final = this.fecha_inicial;
+                    console.log("La fecha final no puede ser anterior a la fecha inicial. Se ha ajustado automáticamente.");
+                }
                 // Llama a la función para enviar al backend la fecha final
-
             } else {
                 console.error("Fecha no válida. Asegúrese de que la fecha seleccionada esté definida y sea válida.");
             }
             this.liciTodas();
-            
         },
+
         async listFavorito() {
             if (licitUp_bk.isAuthenticated()) {
                 try {

@@ -118,13 +118,19 @@ export default {
       comunasDbLicitup: comunas,
       //comunasDbLicitup: ['Argentina', 'chile'],
       codificaciónLicitaciones: [
-        { valor: 'L1', descripcion: 'Licitación Pública Menor a 100 UTM (L1)' },
-        { valor: 'LE', descripcion: 'Licitación Pública Entre 100 y 1000 UTM (LE)' },
-        { valor: 'LP', descripcion: 'Licitación Pública Mayor 1000 UTM (LP)' },
-        { valor: 'LR', descripcion: 'Licitación Pública Mayor a 5000 (LR)' },
-        { valor: 'LQ', descripcion: 'Licitación Pública entre a 2000 y 5000 UTM' },
-        { valor: 'LS', descripcion: 'Licitación Pública Servicios personales especializados (LS)' },
-        { valor: 'O1', descripcion: 'Licitación Codificacion O1'}
+      { valor: 'L1', descripcion: 'Lic. Publ Menor a 100 UTM (L1)' },
+      { valor: 'LE', descripcion: 'Lic. Publ Entre 100 y 1000 UTM (LE)' },
+      { valor: 'LP', descripcion: 'Lic. Publ Mayor 1000 UTM (LP)' },
+      { valor: 'LR', descripcion: 'Lic. Publ Mayor a 5000 UTM (LR)' },
+      { valor: 'LQ', descripcion: 'Lic. Publ entre a 2000 y 5000 UTM (LQ)' },
+      { valor: 'LS', descripcion: 'Lic. Publ Servicios personales especializados (LS)' },
+      { valor: 'O1', descripcion: 'Lic Codificacion O1' },
+      { valor: 'E2', descripcion: 'Lic Privada Inferior a 100 UTM (E2)' },
+      { valor: 'CO', descripcion: 'Lic Privada igual o superior a 100 UTM e inferior a 1000 UTM (CO)' },
+      { valor: 'B2', descripcion: 'Lic Privada igual o superior a 1000 UTM e inferior a 2000 UTM (B2)' },
+      { valor: 'H2', descripcion: 'Lic Privada igual o superior a 2000 UTM e inferior a 5000 UTM (H2)' },
+      { valor: 'I2', descripcion: 'Lic Privada Mayor a 5000 UTM (I2)' },
+      { valor: 'O2', descripcion: 'Lic Privada de Obras (O2)' }
       ],
     };
   },
@@ -252,6 +258,19 @@ export default {
     iniciarEdicion() {
       this.editando = true;
     },
+    verificarListaNoVacia(nombreCampo, lista) {
+      if (lista.length === 0) {
+        this.$swal({
+          title: 'Error',
+          text: `Debe tener al menos un ${nombreCampo} en su perfil.`,
+          icon: 'error',
+          timer: 5000,
+          timerProgressBar: true,
+        });
+        return false; // Indica que hay un error
+      }
+      return true; // Indica que no hay errores
+    },
 
     guardarCambios() {
       // Filtra elementos vacíos antes de asignar a this.productos
@@ -259,42 +278,14 @@ export default {
       this.ciudades = this.ciudades.filter(comuna => comuna.trim() !== '');
       this.ls_codifi = this.ls_codifi.filter(codi => codi.trim() !== '');
 
-      // Verificar si la lista de productos está vacía
-      if (this.productos.length === 0) {
-        // Mostrar alerta de error
-        this.$swal({
-          title: 'Error',
-          text: 'Debe tener al menos un producto o servicio en su perfil.',
-          icon: 'error',
-          timer: 5000,
-          timerProgressBar: true,
-        });
-        return; // No permite continuar si hay un error
-      }
+      // Verificar si las listas no están vacías
+      const productosValidos = this.verificarListaNoVacia('producto o servicio', this.productos);
+      const ciudadesValidas = this.verificarListaNoVacia('Comuna', this.ciudades);
+      const codificacionesValidas = this.verificarListaNoVacia('Tipo de Licitaciones', this.ls_codifi);
 
-      if (this.ciudades.length === 0) {
-        // Mostrar alerta de error
-        this.$swal({
-          title: 'Error',
-          text: 'Debe tener al menos una Comuna en su perfil.',
-          icon: 'error',
-          timer: 5000,
-          timerProgressBar: true,
-        });
-        return; // No permite continuar si hay un error
-      }
-
-
-      if (this.ls_codifi.length === 0) {
-        // Mostrar alerta de error
-        this.$swal({
-          title: 'Error',
-          text: 'Debe tener al menos un Tipos Licitaciones en su perfil.',
-          icon: 'error',
-          timer: 5000,
-          timerProgressBar: true,
-        });
-        return; // No permite continuar si hay un error
+      // Si alguna lista está vacía, detener la ejecución
+      if (!productosValidos || !ciudadesValidas || !codificacionesValidas) {
+        return;
       }
 
       // Verificar si hay productos duplicados
@@ -303,11 +294,35 @@ export default {
         // Compara el producto actual con los productos anteriores (en minúsculas)
         return this.productos.slice(0, index).some(p => p.toLowerCase() === productoEnMinuscula);
       });
-      if (productosDuplicados.length > 0) {
-        // Mostrar mensaje de error si hay productos duplicados
+
+      // Verificar si hay comunas duplicadas
+      const comunasDuplicadas = this.ciudades.filter((comuna, index) => {
+        const comunaEnMinuscula = comuna.toLowerCase();
+        // Compara la comuna actual con las comunas anteriores (en minúsculas)
+        return this.ciudades.slice(0, index).some(c => c.toLowerCase() === comunaEnMinuscula);
+      });
+
+      // Verificar si hay tipos de licitaciones duplicados
+      const codigosDuplicados = this.ls_codifi.filter((codi, index) => {
+        const codiEnMinuscula = codi.toLowerCase();
+        // Compara el tipo de licitación actual con los tipos de licitaciones anteriores (en minúsculas)
+        return this.ls_codifi.slice(0, index).some(c => c.toLowerCase() === codiEnMinuscula);
+      });
+
+      // Crear un arreglo para almacenar la ubicación de los duplicados
+      const donde = [];
+      if (productosDuplicados.length > 0) donde.push('productos');
+      if (comunasDuplicadas.length > 0) donde.push('comunas');
+      if (codigosDuplicados.length > 0) donde.push('tipos de licitaciones');
+
+      // Combinar productos duplicados, comunas duplicadas y tipos de licitaciones duplicados
+      const duplicados = [...new Set([...productosDuplicados, ...comunasDuplicadas, ...codigosDuplicados])];
+
+      // Mostrar alerta si hay duplicados
+      if (duplicados.length > 0) {
         this.$swal({
           title: 'Error',
-          text: `Se encontraron productos duplicados: ${productosDuplicados.join(', ')}`,
+          text: `Se encontraron duplicados en ${donde.join(', ')}: ${duplicados.join(', ')}`,
           icon: 'error',
           timer: 5000,
           timerProgressBar: true,

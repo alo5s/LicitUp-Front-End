@@ -39,7 +39,7 @@ export default {
     return {
       numLi: 20,
       min: 0, // Valor mínimo personalizado
-      max: 100000000, // Valor máximo personalizado
+      max: 1000000000, // Valor máximo personalizado
       montoMinimo: 0, // Valor actual del monto mínimo
       montoMaximo: 1000000, // Valor actual del monto máximo
     };

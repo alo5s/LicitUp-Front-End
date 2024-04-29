@@ -70,9 +70,11 @@
                         <span>Nombre del Organismo:</span>
                         <p>{{ capitalizeFirstLetter(datos.Nombre_del_Organismo) ?? 'No definida' }}</p>
                     </div>
+                    <!--
                     <div class="mb-3">
                         <a :href="generateMercadoPublicoUrl(datos.CodigoExterno)" target="_blank">Ver orden de compra</a>
                     </div>
+                    -->
                 </div>
               </div>
         </div>

@@ -14,27 +14,24 @@
             </button>
           </div>
       </div>
-      <div class="content-nav-login" :class=" {'nav-link-ul-visible': showMenu }">
+      <div class="content-nav-login" :class="{ 'nav-link-ul-visible': showMenu }">
           <nav @click="closeMenu">
               <ul class="content-ul-li-a">
-                  <li><router-link class="link" to="/">Inicio</router-link></li>
-                  <li><router-link class="link" to="/Licitaciones">Licitaciones</router-link></li>
-                  <li><router-link class="link" to="/Seguimientos">Seguimientos</router-link></li>
-                  <li><router-link class="link" to="/Analisis">Análisis</router-link></li>
-                  <li><router-link class="link" to="/Mapa">Mapa</router-link></li>
-
-                  <!--------------------
-                  <li><router-link class="link" to="/eventos">eventos</router-link></li>
-                  <button v-if="isLoggedIn" @click="handleLogout" class="btn-logout btn-header" >Cerrar sesión</button>
-
-                  ----------------------> 
+                  <li :class="{ 'active': $route.path === '/' }"><router-link class="link" to="/">Inicio</router-link></li>
+                  <li :class="{ 'active': $route.path === '/Licitaciones' }"><router-link class="link" to="/Licitaciones">Licitaciones</router-link></li>
+                  <!-- Agrega clases 'active' según la ruta actual -->
+                  <li :class="{ 'active': $route.path === '/Seguimientos' }"><router-link class="link" to="/Seguimientos">Seguimientos</router-link></li>
+                  <li :class="{ 'active': $route.path === '/Analisis' }"><router-link class="link" to="/Analisis">Análisis</router-link></li>
+                  <li :class="{ 'active': $route.path === '/Mapa' }"><router-link class="link" to="/Mapa">Mapa</router-link></li>
+                  <!-- Agrega esta sección -->
                   <li> 
                     <router-link v-if="!isLoggedIn" to="/Login" class="btn-header">Iniciar sesión</router-link>
-                    <router-link class=" usario " v-if="isLoggedIn" to="/Perfil">Perfil de Usuario</router-link>
+                    <router-link class="usario" v-if="isLoggedIn" to="/Perfil">Perfil de Usuario</router-link>
                   </li>
               </ul>
           </nav> 
       </div>
+
   </header>
 </template>
 <script>
@@ -72,13 +69,22 @@ export default {
 .link-logo{
   padding: 0px;
 }
+.active a {
+  transition: 0.5s;
+  color: #000; /* Color negro para el texto activo */
+  font-weight: bold; /* Texto en negrita */
+  border-radius: 25vh;
+  cursor: pointer;
+  background: #fff;
+}
+
 .usario{
   width: 10vh;
   height: 5vh;
-  color: rgb(0, 0, 0);
+  color: #000; /* Color negro para el texto */
   border-radius: 25vh;
   background: #fff;
-  font-size: 16px;
+
   font-family: sans-serif;
   border: none;
 }
@@ -92,7 +98,7 @@ export default {
 
 .btn-header:hover{
   transition: 0.5s;
-  color: rgb(0, 0, 0);
+  color: #000; /* Color negro para el texto */
   border-radius: 25vh;
   cursor: pointer;
   background: #fff;
@@ -100,7 +106,7 @@ export default {
 
 .link:hover {
   transition: 0.5s;
-  color: rgb(0, 0, 0);
+  color: #000; /* Color negro para el texto */
   border-radius: 25vh;
   cursor: pointer;
   background: #fff;
@@ -111,7 +117,7 @@ header {
   box-shadow: 0px 5px 5px rgb(0 0 0 / 20%);
   display: flex;
   justify-content: space-between;
-  font-size: 20px;
+  font-size: 18px; /* Tamaño de fuente ajustado */
   padding: 20px 25px ;
   background-color: #2c2c55;
   align-items: center;
@@ -144,6 +150,7 @@ header .logo {
   color: white;
   max-width: 400px;
   margin: auto;
+  font-size: 18px;
 }
 
 .content-menu-logo {
@@ -196,15 +203,14 @@ header .logo {
 
   .nav-link-ul-visible {
     padding: 10px;
-	  height: calc(100% - 60px);
-	  margin-top: 20px;
-	  display: flex ;
-	  flex-direction: column;
-	  align-items: center;
+    height: calc(100% - 60px);
+    margin-top: 20px;
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
   }
   
 }
 
 
 </style>
-

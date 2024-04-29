@@ -44,13 +44,19 @@ export default {
   data() {
     return {
       codificaciónLicitaciones: [
-        { valor: 'L1', descripcion: 'Lic. Publ Menor a 100 UTM (L1)' },
-        { valor: 'LE', descripcion: 'Lic. Publ Entre 100 y 1000 UTM (LE)' },
-        { valor: 'LP', descripcion: 'Lic. Publ Mayor 1000 UTM (LP)' },
-        { valor: 'LR', descripcion: 'Lic. Publ Mayor a 5000 (LR)' },
-        { valor: 'LQ', descripcion: 'Lic. Publ entre a 2000 y 5000 UTM' },
-        { valor: 'LS', descripcion: 'Lic. Publ Servicios personales especializados (LS)' },
-        { valor: 'O1', descripcion: 'Lic Codificacion O1'}
+      { valor: 'L1', descripcion: 'Lic. Publ Menor a 100 UTM (L1)' },
+      { valor: 'LE', descripcion: 'Lic. Publ Entre 100 y 1000 UTM (LE)' },
+      { valor: 'LP', descripcion: 'Lic. Publ Mayor 1000 UTM (LP)' },
+      { valor: 'LR', descripcion: 'Lic. Publ Mayor a 5000 UTM (LR)' },
+      { valor: 'LQ', descripcion: 'Lic. Publ entre a 2000 y 5000 UTM (LQ)' },
+      { valor: 'LS', descripcion: 'Lic. Publ Servicios personales especializados (LS)' },
+      { valor: 'O1', descripcion: 'Lic Codificacion O1' },
+      { valor: 'E2', descripcion: 'Lic Privada Inferior a 100 UTM (E2)' },
+      { valor: 'CO', descripcion: 'Lic Privada igual o superior a 100 UTM e inferior a 1000 UTM (CO)' },
+      { valor: 'B2', descripcion: 'Lic Privada igual o superior a 1000 UTM e inferior a 2000 UTM (B2)' },
+      { valor: 'H2', descripcion: 'Lic Privada igual o superior a 2000 UTM e inferior a 5000 UTM (H2)' },
+      { valor: 'I2', descripcion: 'Lic Privada Mayor a 5000 UTM (I2)' },
+      { valor: 'O2', descripcion: 'Lic Privada de Obras (O2)' }
       ],
       codificacionSeleccionada: null,
     };

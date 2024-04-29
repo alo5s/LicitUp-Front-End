@@ -48,16 +48,30 @@
                         <span>Fecha de publicación: </span>
                         <p>{{(respuesta.FechaPublicacion) ?? 'No definida' }}</p>
                     </div>
+                    <div class="row">
+                        <span>Fecha inicio de preguntas: </span>
+                        <p>{{(respuesta.FechaInicio) ?? 'No definida' }}</p>
+                    </div>
+                    <div class="row">
+                        <span>Fecha final de preguntas: </span>
+                        <p>{{(respuesta.FechaFinal) ?? 'No definida' }}</p>
+                    </div>
+                    <div class="row">
+                        <span>Fecha de publicación de respuestas:</span>
+                        <p>{{(respuesta.FechaPubRespuestas) ?? 'No definida' }}</p>
+                    </div>
                     <!-------------- Variable ---------------------->
+                    <div class="row">
+                        <span>Fecha de cierre: </span>
+                        <p>{{ (respuesta.FechaCerrada) ?? 'No definida' }}</p>
+                    </div>
+
                     <div class="row">
                         <span>{{ mostrarFecha(0) }}</span>
                         <p>{{ mostrarFecha(1) }}</p>
                     </div>
                     <!----------------------------------------------->
-                    <div class="row">
-                        <span>Fecha de cierre: </span>
-                        <p>{{ (respuesta.FechaCerrada) ?? 'No definida' }}</p>
-                    </div>
+
                 </div>
 
                 <div class="row">
